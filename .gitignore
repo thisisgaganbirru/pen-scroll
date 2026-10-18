@@ -11,3 +11,6 @@
 .cxx/
 *.apk
 *.aab
+
+# Local session memory
+/mem/
