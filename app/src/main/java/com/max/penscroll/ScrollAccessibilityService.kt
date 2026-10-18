@@ -7,6 +7,7 @@ import android.graphics.Path
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import android.os.SystemClock
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.KeyEvent
@@ -27,7 +28,9 @@ class ScrollAccessibilityService : AccessibilityService() {
             AIR_COMMAND,
         )
 
-        private const val MULTI_PRESS_WINDOW_MS = 1200L
+        // Samsung needs ~0.8 s of pressing per hold, so two quick holds start 1.1-1.3 s apart.
+        private const val MULTI_PRESS_WINDOW_MS = 2000L
+        private const val SETTLE_MS = 300L
         private const val TAP_MS = 40L
         private const val TAP_GAP_MS = 80L
 
@@ -49,8 +52,8 @@ class ScrollAccessibilityService : AccessibilityService() {
     @Volatile
     private var foregroundPackage: String? = null
 
-    // A first press-and-hold waiting to see whether a second one follows.
-    private var pendingPress: Runnable? = null
+    // When the last single press-and-hold arrived, so a quick second one can turn it around.
+    private var lastHoldAt = 0L
 
     override fun onServiceConnected() {
         super.onServiceConnected()
@@ -83,24 +86,22 @@ class ScrollAccessibilityService : AccessibilityService() {
     override fun onInterrupt() = Unit
 
     /**
-     * One press-and-hold scrolls down (next reel); a second within [MULTI_PRESS_WINDOW_MS]
-     * scrolls up instead. Pen Scroll only sees these trampoline launches, never the pen clicks themselves.
+     * One press-and-hold scrolls down (next reel) straight away. A second within
+     * [MULTI_PRESS_WINDOW_MS] scrolls up twice: once to undo the first, once more to go back.
+     * Pen Scroll only sees these trampoline launches, never the pen clicks themselves.
      */
     fun smartPress() {
         if (Prefs.isPaused(this)) return
-        val pending = pendingPress
-        if (pending != null) {
-            handler.removeCallbacks(pending)
-            pendingPress = null
-            perform(PenAction.SCROLL_UP)
+        val now = SystemClock.uptimeMillis()
+        if (now - lastHoldAt <= MULTI_PRESS_WINDOW_MS) {
+            lastHoldAt = 0L
+            val delay = Prefs.delayMs(this).toLong()
+            perform(PenAction.SCROLL_UP, delay)
+            // Let the first swipe finish and the feed settle before the second.
+            perform(PenAction.SCROLL_UP, delay + Prefs.durationMs(this) + SETTLE_MS)
         } else {
-            val single = Runnable {
-                pendingPress = null
-                // The window already gave the trampoline time to close, so no extra delay.
-                perform(PenAction.SCROLL_DOWN, delayMs = 0L)
-            }
-            pendingPress = single
-            handler.postDelayed(single, MULTI_PRESS_WINDOW_MS)
+            lastHoldAt = now
+            perform(PenAction.SCROLL_DOWN)
         }
     }
 

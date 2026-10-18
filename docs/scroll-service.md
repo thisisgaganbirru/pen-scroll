@@ -27,10 +27,12 @@ Implemented on `dev`; builds and lints clean.
 - Scroll Down/Up keep their own trampolines (`ScrollDownActivity`, `ScrollUpActivity`) and static shortcuts, so existing Air action choices keep working. All other actions go through `PenActionActivity`, which reads the action id from the intent extra.
 - All 12 actions are static shortcuts in `res/xml/shortcuts.xml`. Samsung's Air actions picker listed the static Scroll Down/Up but not dynamic shortcuts (tested on device), so there are no dynamic ones; `Shortcuts.clearDynamic` removes leftovers from the earlier build.
 - Only the Press and hold slot accepts an app shortcut; Samsung's pen gestures (Back, Home, Recents, AI select, Screen write) are fixed system gestures and can't be assigned to apps. Pen Scroll never sees pen clicks, only these shortcut launches.
-- **Pen Scroll Smart** (`SmartActivity` → `ScrollAccessibilityService.smartPress`) counts press-and-holds: one runs Scroll Down (next reel) after a 1.2 s window (`MULTI_PRESS_WINDOW_MS`), a second within the window cancels it and runs Scroll Up. The per-app mapping that preceded this was removed.
+- **Pen Scroll Smart** (`SmartActivity` → `ScrollAccessibilityService.smartPress`) counts press-and-holds: one runs Scroll Down (next reel) straight away; a second within 2 s (`MULTI_PRESS_WINDOW_MS`, measured from `lastHoldAt`) runs Scroll Up twice, undoing the first and going back one. The window was 1.2 s with a wait-then-decide design, but Samsung needs about 0.8 s of pressing per hold (logged), so two quick holds start 1.1–1.3 s apart and the double hold was hard to hit. The per-app mapping that preceded this was removed.
 - Each trampoline implements `run(service)`; the base class shows the service-off and paused toasts.
 - The 12 fixed shortcuts remain as direct single-action choices.
-- Known issues: the single hold waits out the 1.2 s window. Verified on device: holds through the plain "Pen Scroll" entry (`LaunchActivity`) scroll in Instagram, and the double hold works.
+- Known issues: a double hold flicks down then up twice on screen. Verified on device: holds through the plain "Pen Scroll" entry (`LaunchActivity`) scroll in Instagram. The 2 s instant version is not yet verified with the pen.
+- Continuous scrolling while the button is held isn't possible: Pen Scroll only learns when a hold starts (the app launch), never when it ends.
+- Reading Air Command's button events from logcat was tried and dropped. Even with `READ_LOGS` granted over adb, this phone's logd returned only Pen Scroll's own lines (background and foreground alike, with no consent prompt).
 - Custom pen motions are not possible on this phone: the S Pen Remote SDK's binding service is gone and the remaining one is Samsung-signature only (see `mem/20261018-spen-remote-sdk-feasibility.md`).
 
 
