@@ -11,21 +11,20 @@ import android.widget.Toast
  */
 abstract class TrampolineActivity : Activity() {
 
-    protected abstract fun resolveAction(): PenAction?
+    /** Asks [service] to do this entry's work; only called when it is running and not paused. */
+    protected abstract fun run(service: ScrollAccessibilityService)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         disableTransitions()
 
-        val action = resolveAction()
         val service = ScrollAccessibilityService.instance
         when {
-            action == null -> Unit
             service == null ->
                 Toast.makeText(this, R.string.service_off_toast, Toast.LENGTH_LONG).show()
             Prefs.isPaused(this) ->
                 Toast.makeText(this, R.string.paused_toast, Toast.LENGTH_SHORT).show()
-            else -> service.perform(action)
+            else -> run(service)
         }
         finish()
     }
@@ -50,20 +49,21 @@ abstract class TrampolineActivity : Activity() {
 }
 
 class ScrollDownActivity : TrampolineActivity() {
-    override fun resolveAction() = PenAction.SCROLL_DOWN
+    override fun run(service: ScrollAccessibilityService) = service.perform(PenAction.SCROLL_DOWN)
 }
 
 class ScrollUpActivity : TrampolineActivity() {
-    override fun resolveAction() = PenAction.SCROLL_UP
+    override fun run(service: ScrollAccessibilityService) = service.perform(PenAction.SCROLL_UP)
 }
 
-/** The single press-and-hold entry: runs whatever is mapped to the app in front. */
+/** The press-and-hold entry: once scrolls up, twice quickly scrolls down. */
 class SmartActivity : TrampolineActivity() {
-    override fun resolveAction() =
-        Prefs.actionFor(this, ScrollAccessibilityService.instance?.currentPackage)
+    override fun run(service: ScrollAccessibilityService) = service.smartPress()
 }
 
 /** Target of the fixed per-action shortcuts; the action id travels in the intent extra. */
 class PenActionActivity : TrampolineActivity() {
-    override fun resolveAction() = PenAction.fromId(intent.getStringExtra(Shortcuts.EXTRA_ACTION))
+    override fun run(service: ScrollAccessibilityService) {
+        PenAction.fromId(intent.getStringExtra(Shortcuts.EXTRA_ACTION))?.let(service::perform)
+    }
 }

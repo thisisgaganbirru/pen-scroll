@@ -26,6 +26,7 @@ class ScrollAccessibilityService : AccessibilityService() {
             "com.samsung.android.service.aircommand",
         )
 
+        private const val MULTI_PRESS_WINDOW_MS = 1200L
         private const val TAP_MS = 40L
         private const val TAP_GAP_MS = 80L
 
@@ -46,8 +47,8 @@ class ScrollAccessibilityService : AccessibilityService() {
     @Volatile
     private var foregroundPackage: String? = null
 
-    /** The app in front, as last seen in a window change; null until the first one. */
-    val currentPackage: String? get() = foregroundPackage
+    // A first press-and-hold waiting to see whether a second one follows.
+    private var pendingPress: Runnable? = null
 
     override fun onServiceConnected() {
         super.onServiceConnected()
@@ -78,6 +79,28 @@ class ScrollAccessibilityService : AccessibilityService() {
     }
 
     override fun onInterrupt() = Unit
+
+    /**
+     * One press-and-hold scrolls up; a second within [MULTI_PRESS_WINDOW_MS] scrolls down
+     * instead. Pen Scroll only sees these trampoline launches, never the pen clicks themselves.
+     */
+    fun smartPress() {
+        if (Prefs.isPaused(this)) return
+        val pending = pendingPress
+        if (pending != null) {
+            handler.removeCallbacks(pending)
+            pendingPress = null
+            perform(PenAction.SCROLL_DOWN)
+        } else {
+            val single = Runnable {
+                pendingPress = null
+                // The window already gave the trampoline time to close, so no extra delay.
+                perform(PenAction.SCROLL_UP, delayMs = 0L)
+            }
+            pendingPress = single
+            handler.postDelayed(single, MULTI_PRESS_WINDOW_MS)
+        }
+    }
 
     /** Scroll once in [direction]; see [perform] for the delay. */
     fun scroll(direction: Direction, delayMs: Long = Prefs.delayMs(this).toLong()) =

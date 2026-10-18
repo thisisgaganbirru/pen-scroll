@@ -43,37 +43,4 @@ object Prefs {
 
     fun volumeMode(context: Context) = get(context).getBoolean(KEY_VOLUME_MODE, false)
 
-    private const val KEY_DEFAULT_ACTION = "default_action"
-    private const val KEY_MAPPED_APPS = "mapped_apps"
-
-    /** What "Pen Scroll Smart" does in any app that has no mapping of its own. */
-    fun defaultAction(context: Context): PenAction =
-        PenAction.fromId(get(context).getString(KEY_DEFAULT_ACTION, null)) ?: PenAction.SCROLL_DOWN
-
-    fun setDefaultAction(context: Context, action: PenAction) =
-        get(context).edit().putString(KEY_DEFAULT_ACTION, action.id).apply()
-
-    fun mappedApps(context: Context): Set<String> =
-        get(context).getStringSet(KEY_MAPPED_APPS, emptySet()) ?: emptySet()
-
-    fun appAction(context: Context, packageName: String): PenAction? =
-        PenAction.fromId(get(context).getString("app_$packageName", null))
-
-    fun setAppAction(context: Context, packageName: String, action: PenAction) {
-        get(context).edit()
-            .putString("app_$packageName", action.id)
-            .putStringSet(KEY_MAPPED_APPS, mappedApps(context) + packageName)
-            .apply()
-    }
-
-    fun removeApp(context: Context, packageName: String) {
-        get(context).edit()
-            .remove("app_$packageName")
-            .putStringSet(KEY_MAPPED_APPS, mappedApps(context) - packageName)
-            .apply()
-    }
-
-    /** The action for the app in front, or the default when it is unknown or unmapped. */
-    fun actionFor(context: Context, packageName: String?): PenAction =
-        packageName?.let { appAction(context, it) } ?: defaultAction(context)
 }
