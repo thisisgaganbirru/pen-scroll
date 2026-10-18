@@ -3,10 +3,23 @@
     <string name="app_name">Pen Scroll</string>
     <string name="scroll_down">Scroll Down</string>
     <string name="scroll_up">Scroll Up</string>
+    <string name="swipe_left">Swipe Left (next)</string>
+    <string name="swipe_right">Swipe Right (previous)</string>
+    <string name="double_tap">Double Tap (like)</string>
+    <string name="action_back">Back</string>
+    <string name="action_home">Home</string>
+    <string name="action_recents">Recents</string>
+    <string name="action_notifications">Open Notifications</string>
+    <string name="action_quick_settings">Open Quick Settings</string>
+    <string name="action_screenshot">Take Screenshot</string>
+    <string name="action_lock_screen">Lock Screen</string>
+    <string name="action_disabled_toast">This Pen Scroll action is turned off</string>
+    <string name="actions_header">Actions</string>
+    <string name="actions_hint">Turned-on actions appear in S Pen Air actions under Pen Scroll. Turn off the ones you don\'t need.</string>
     <string name="tile_label">Pen Scroll</string>
     <string name="tagline">Scroll any app with your S Pen button</string>
 
-    <string name="accessibility_description">Pen Scroll only performs a single swipe gesture on the screen when you trigger \"Scroll Down\" or \"Scroll Up\" (for example from S Pen Air actions). It does not read, store or send any screen content. If you turn on the volume-key option, it also turns volume up/down into scrolls while Instagram is open.</string>
+    <string name="accessibility_description">Pen Scroll only performs a single action, such as a swipe, a double tap, Back or Home, when you trigger it (for example from S Pen Air actions). It does not read, store or send any screen content. If you turn on the volume-key option, it also turns volume up/down into scrolls while Instagram is open.</string>
 
     <string name="service_off_toast">Turn on Pen Scroll in Accessibility settings</string>
     <string name="paused_toast">Pen Scroll is paused</string>
@@ -50,7 +63,7 @@
         <item>Android 13+ blocks Accessibility for sideloaded apps. Go to Settings > Apps > Pen Scroll > three-dot menu (top right) > \"Allow restricted settings\".</item>
         <item>Settings > Accessibility > Installed apps > Pen Scroll > turn on.</item>
         <item>Settings > Apps > Pen Scroll > Battery > Unrestricted (so Samsung doesn\'t kill it).</item>
-        <item>Settings > Advanced features > S Pen > Air actions > Press and hold Pen button > choose \"Scroll Down\".</item>
-        <item>If the gesture slots under Anywhere actions accept apps, assign one to \"Scroll Down\" and one to \"Scroll Up\".</item>
+        <item>Settings > Advanced features > S Pen > Air actions > Press and hold Pen button > choose Pen Scroll, then \"Scroll Down\".</item>
+        <item>If the gesture slots under Anywhere actions accept apps, assign them to other Pen Scroll actions such as \"Scroll Up\" or \"Back\".</item>
     </string-array>
 </resources>

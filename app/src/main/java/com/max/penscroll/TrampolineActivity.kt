@@ -7,21 +7,27 @@ import android.widget.Toast
 
 /**
  * Invisible activity launched by S Pen Air actions. It asks the accessibility service to
- * swipe and finishes straight away, so the app underneath stays in front.
+ * perform its action and finishes straight away, so the app underneath stays in front.
  */
-abstract class TrampolineActivity(private val direction: Direction) : Activity() {
+abstract class TrampolineActivity : Activity() {
+
+    protected abstract fun resolveAction(): PenAction?
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         disableTransitions()
 
+        val action = resolveAction()
         val service = ScrollAccessibilityService.instance
         when {
+            action == null -> Unit
             service == null ->
                 Toast.makeText(this, R.string.service_off_toast, Toast.LENGTH_LONG).show()
             Prefs.isPaused(this) ->
                 Toast.makeText(this, R.string.paused_toast, Toast.LENGTH_SHORT).show()
-            else -> service.scroll(direction)
+            !Prefs.isActionEnabled(this, action) ->
+                Toast.makeText(this, R.string.action_disabled_toast, Toast.LENGTH_SHORT).show()
+            else -> service.perform(action)
         }
         finish()
     }
@@ -45,6 +51,15 @@ abstract class TrampolineActivity(private val direction: Direction) : Activity()
     }
 }
 
-class ScrollDownActivity : TrampolineActivity(Direction.DOWN)
+class ScrollDownActivity : TrampolineActivity() {
+    override fun resolveAction() = PenAction.SCROLL_DOWN
+}
 
-class ScrollUpActivity : TrampolineActivity(Direction.UP)
+class ScrollUpActivity : TrampolineActivity() {
+    override fun resolveAction() = PenAction.SCROLL_UP
+}
+
+/** Target of the dynamic shortcuts; the action id travels in the intent extra. */
+class PenActionActivity : TrampolineActivity() {
+    override fun resolveAction() = PenAction.fromId(intent.getStringExtra(Shortcuts.EXTRA_ACTION))
+}

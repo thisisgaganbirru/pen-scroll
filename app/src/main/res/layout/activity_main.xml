@@ -141,6 +141,22 @@
                 android:visibility="gone" />
         </LinearLayout>
 
+        <!-- Actions -->
+        <LinearLayout
+            android:id="@+id/actionsCard"
+            style="@style/Card">
+
+            <TextView
+                style="@style/CardTitle"
+                android:layout_marginBottom="4dp"
+                android:text="@string/actions_header" />
+
+            <TextView
+                style="@style/Hint"
+                android:layout_marginBottom="16dp"
+                android:text="@string/actions_hint" />
+        </LinearLayout>
+
         <!-- Tuning -->
         <LinearLayout style="@style/Card">
 

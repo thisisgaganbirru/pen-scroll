@@ -26,9 +26,13 @@ class ScrollAccessibilityService : AccessibilityService() {
             "com.samsung.android.service.aircommand",
         )
 
+        private const val TAP_MS = 40L
+        private const val TAP_GAP_MS = 80L
+
         private val TRAMPOLINE_CLASSES = setOf(
             ScrollDownActivity::class.java.name,
             ScrollUpActivity::class.java.name,
+            PenActionActivity::class.java.name,
         )
 
         @Volatile
@@ -65,24 +69,51 @@ class ScrollAccessibilityService : AccessibilityService() {
         if (pkg in IGNORED_PACKAGES) return
         // Our own trampolines flash in front of the real app, so they must not count; any
         // other Pen Scroll window (the setup screen) does, so volume keys stop scrolling.
-        if (pkg == packageName && event.className?.toString() in TRAMPOLINE_CLASSES) return
+        if (pkg == packageName && event.className?.toString().orEmpty() in TRAMPOLINE_CLASSES) return
         foregroundPackage = pkg
     }
 
     override fun onInterrupt() = Unit
 
+    /** Scroll once in [direction]; see [perform] for the delay. */
+    fun scroll(direction: Direction, delayMs: Long = Prefs.delayMs(this).toLong()) =
+        perform(if (direction == Direction.DOWN) PenAction.SCROLL_DOWN else PenAction.SCROLL_UP, delayMs)
+
     /**
-     * Swipe once in [direction]. The default delay gives the trampoline activity time to
-     * finish so the app underneath (e.g. Instagram) is in front when the finger lands.
+     * Run [action] after [delayMs]. The default delay gives the trampoline activity time to
+     * finish so the app underneath (e.g. Instagram) is in front when the action lands.
      */
-    fun scroll(direction: Direction, delayMs: Long = Prefs.delayMs(this).toLong()) {
+    fun perform(action: PenAction, delayMs: Long = Prefs.delayMs(this).toLong()) {
         if (Prefs.isPaused(this)) return
-        handler.postDelayed({ dispatchSwipe(direction) }, delayMs)
+        handler.postDelayed({ execute(action) }, delayMs)
     }
 
-    private fun dispatchSwipe(direction: Direction) {
-        // Re-check: the user may have paused while this swipe was waiting out its delay.
+    private fun execute(action: PenAction) {
+        // Re-check: the user may have paused while this action was waiting out its delay.
         if (Prefs.isPaused(this)) return
+        when (action) {
+            PenAction.SCROLL_DOWN -> swipeVertical(Direction.DOWN)
+            PenAction.SCROLL_UP -> swipeVertical(Direction.UP)
+            PenAction.SWIPE_LEFT -> swipeHorizontal(toLeft = true)
+            PenAction.SWIPE_RIGHT -> swipeHorizontal(toLeft = false)
+            PenAction.DOUBLE_TAP -> doubleTap()
+            PenAction.BACK -> performGlobalAction(GLOBAL_ACTION_BACK)
+            PenAction.HOME -> performGlobalAction(GLOBAL_ACTION_HOME)
+            PenAction.RECENTS -> performGlobalAction(GLOBAL_ACTION_RECENTS)
+            PenAction.NOTIFICATIONS -> performGlobalAction(GLOBAL_ACTION_NOTIFICATIONS)
+            PenAction.QUICK_SETTINGS -> performGlobalAction(GLOBAL_ACTION_QUICK_SETTINGS)
+            PenAction.SCREENSHOT ->
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    performGlobalAction(GLOBAL_ACTION_TAKE_SCREENSHOT)
+                }
+            PenAction.LOCK_SCREEN ->
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    performGlobalAction(GLOBAL_ACTION_LOCK_SCREEN)
+                }
+        }
+    }
+
+    private fun swipeVertical(direction: Direction) {
         val (width, height) = screenSize()
         val half = Prefs.distancePercent(this) / 200f
         val x = width * 0.5f
@@ -95,12 +126,36 @@ class ScrollAccessibilityService : AccessibilityService() {
                 Direction.UP -> { moveTo(x, high); lineTo(x, low) }
             }
         }
-        val stroke = GestureDescription.StrokeDescription(
-            path, 0L, Prefs.durationMs(this).toLong()
-        )
-        val gesture = GestureDescription.Builder().addStroke(stroke).build()
+        dispatch(GestureDescription.StrokeDescription(path, 0L, Prefs.durationMs(this).toLong()))
+    }
 
-        val accepted = dispatchGesture(gesture, null, null)
+    /** [toLeft]: the finger moves right to left, which is "next" in Stories and carousels. */
+    private fun swipeHorizontal(toLeft: Boolean) {
+        val (width, height) = screenSize()
+        val half = Prefs.distancePercent(this) / 200f
+        val y = height * 0.5f
+        val right = width * (0.5f + half)
+        val left = width * (0.5f - half)
+
+        val path = Path().apply {
+            if (toLeft) { moveTo(right, y); lineTo(left, y) } else { moveTo(left, y); lineTo(right, y) }
+        }
+        dispatch(GestureDescription.StrokeDescription(path, 0L, Prefs.durationMs(this).toLong()))
+    }
+
+    /** Two quick taps in the middle of the screen, which likes a reel in Instagram. */
+    private fun doubleTap() {
+        val (width, height) = screenSize()
+        fun tap(startMs: Long) = GestureDescription.StrokeDescription(
+            Path().apply { moveTo(width * 0.5f, height * 0.5f) }, startMs, TAP_MS
+        )
+        dispatch(tap(0L), tap(TAP_MS + TAP_GAP_MS))
+    }
+
+    private fun dispatch(vararg strokes: GestureDescription.StrokeDescription) {
+        val builder = GestureDescription.Builder()
+        strokes.forEach(builder::addStroke)
+        val accepted = dispatchGesture(builder.build(), null, null)
         if (!accepted) Log.w(TAG, "dispatchGesture was rejected")
     }
 

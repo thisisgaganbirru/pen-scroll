@@ -42,4 +42,11 @@ object Prefs {
         get(context).edit().putBoolean(KEY_PAUSED, paused).apply()
 
     fun volumeMode(context: Context) = get(context).getBoolean(KEY_VOLUME_MODE, false)
+
+    /** Every action is on until the user switches it off. */
+    fun isActionEnabled(context: Context, action: PenAction) =
+        get(context).getBoolean("action_${action.id}", true)
+
+    fun setActionEnabled(context: Context, action: PenAction, enabled: Boolean) =
+        get(context).edit().putBoolean("action_${action.id}", enabled).apply()
 }

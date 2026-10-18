@@ -68,6 +68,9 @@ class MainActivity : Activity() {
         findViewById<Button>(R.id.testDown).setOnClickListener { startTest(Direction.DOWN) }
         findViewById<Button>(R.id.testUp).setOnClickListener { startTest(Direction.UP) }
 
+        addActionToggles(findViewById<LinearLayout>(R.id.actionsCard)) { Shortcuts.publish(this) }
+        Shortcuts.publish(this)
+
         addSetupSteps(findViewById<LinearLayout>(R.id.setupCard))
     }
 
@@ -85,7 +88,7 @@ class MainActivity : Activity() {
     private fun refreshStatus() {
         when {
             // "Enabled" in Settings isn't enough; swipes only work once the service is connected.
-            !isServiceConnected() ->serviceStatus.setPill(R.string.pill_off, R.color.bad)
+            !isServiceConnected() -> serviceStatus.setPill(R.string.pill_off, R.color.bad)
             Prefs.isPaused(this) -> serviceStatus.setPill(R.string.pill_paused, R.color.warn)
             else -> serviceStatus.setPill(R.string.pill_on, R.color.ok)
         }
