@@ -31,16 +31,8 @@ class ScrollAccessibilityService : AccessibilityService() {
         // Samsung needs ~0.8 s of pressing per hold, so two quick holds start 1.1-1.3 s apart.
         private const val MULTI_PRESS_WINDOW_MS = 2000L
         private const val SETTLE_MS = 300L
-        private const val TAP_MS = 40L
-        private const val TAP_GAP_MS = 80L
 
-        private val TRAMPOLINE_CLASSES = setOf(
-            ScrollDownActivity::class.java.name,
-            ScrollUpActivity::class.java.name,
-            PenActionActivity::class.java.name,
-            SmartActivity::class.java.name,
-            LaunchActivity::class.java.name,
-        )
+        private val TRAMPOLINE_CLASS = LaunchActivity::class.java.name
 
         @Volatile
         var instance: ScrollAccessibilityService? = null
@@ -77,9 +69,9 @@ class ScrollAccessibilityService : AccessibilityService() {
         if (event?.eventType != AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) return
         val pkg = event.packageName?.toString() ?: return
         if (pkg in IGNORED_PACKAGES) return
-        // Our own trampolines flash in front of the real app, so they must not count; any
-        // other Pen Scroll window (the setup screen) does, so volume keys stop scrolling.
-        if (pkg == packageName && event.className?.toString().orEmpty() in TRAMPOLINE_CLASSES) return
+        // Our trampoline flashes in front of the real app, so it must not count; any other
+        // Pen Scroll window (the setup screen) does, so volume keys stop scrolling.
+        if (pkg == packageName && event.className?.toString() == TRAMPOLINE_CLASS) return
         foregroundPackage = pkg
     }
 
@@ -96,51 +88,25 @@ class ScrollAccessibilityService : AccessibilityService() {
         if (now - lastHoldAt <= MULTI_PRESS_WINDOW_MS) {
             lastHoldAt = 0L
             val delay = Prefs.delayMs(this).toLong()
-            perform(PenAction.SCROLL_UP, delay)
+            scroll(Direction.UP, delay)
             // Let the first swipe finish and the feed settle before the second.
-            perform(PenAction.SCROLL_UP, delay + Prefs.durationMs(this) + SETTLE_MS)
+            scroll(Direction.UP, delay + Prefs.durationMs(this) + SETTLE_MS)
         } else {
             lastHoldAt = now
-            perform(PenAction.SCROLL_DOWN)
+            scroll(Direction.DOWN)
         }
     }
-
-    /** Scroll once in [direction]; see [perform] for the delay. */
-    fun scroll(direction: Direction, delayMs: Long = Prefs.delayMs(this).toLong()) =
-        perform(if (direction == Direction.DOWN) PenAction.SCROLL_DOWN else PenAction.SCROLL_UP, delayMs)
 
     /**
-     * Run [action] after [delayMs]. The default delay gives the trampoline activity time to
-     * finish so the app underneath (e.g. Instagram) is in front when the action lands.
+     * Scroll once in [direction] after [delayMs]. The default delay gives the trampoline time to
+     * finish so the app underneath (e.g. Instagram) is in front when the swipe lands.
      */
-    fun perform(action: PenAction, delayMs: Long = Prefs.delayMs(this).toLong()) {
+    fun scroll(direction: Direction, delayMs: Long = Prefs.delayMs(this).toLong()) {
         if (Prefs.isPaused(this)) return
-        handler.postDelayed({ execute(action) }, delayMs)
-    }
-
-    private fun execute(action: PenAction) {
-        // Re-check: the user may have paused while this action was waiting out its delay.
-        if (Prefs.isPaused(this)) return
-        when (action) {
-            PenAction.SCROLL_DOWN -> swipeVertical(Direction.DOWN)
-            PenAction.SCROLL_UP -> swipeVertical(Direction.UP)
-            PenAction.SWIPE_LEFT -> swipeHorizontal(toLeft = true)
-            PenAction.SWIPE_RIGHT -> swipeHorizontal(toLeft = false)
-            PenAction.DOUBLE_TAP -> doubleTap()
-            PenAction.BACK -> performGlobalAction(GLOBAL_ACTION_BACK)
-            PenAction.HOME -> performGlobalAction(GLOBAL_ACTION_HOME)
-            PenAction.RECENTS -> performGlobalAction(GLOBAL_ACTION_RECENTS)
-            PenAction.NOTIFICATIONS -> performGlobalAction(GLOBAL_ACTION_NOTIFICATIONS)
-            PenAction.QUICK_SETTINGS -> performGlobalAction(GLOBAL_ACTION_QUICK_SETTINGS)
-            PenAction.SCREENSHOT ->
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    performGlobalAction(GLOBAL_ACTION_TAKE_SCREENSHOT)
-                }
-            PenAction.LOCK_SCREEN ->
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    performGlobalAction(GLOBAL_ACTION_LOCK_SCREEN)
-                }
-        }
+        handler.postDelayed({
+            // Re-check: the user may have paused while this swipe was waiting out its delay.
+            if (!Prefs.isPaused(this)) swipeVertical(direction)
+        }, delayMs)
     }
 
     private fun swipeVertical(direction: Direction) {
@@ -159,33 +125,8 @@ class ScrollAccessibilityService : AccessibilityService() {
         dispatch(GestureDescription.StrokeDescription(path, 0L, Prefs.durationMs(this).toLong()))
     }
 
-    /** [toLeft]: the finger moves right to left, which is "next" in Stories and carousels. */
-    private fun swipeHorizontal(toLeft: Boolean) {
-        val (width, height) = screenSize()
-        val half = Prefs.distancePercent(this) / 200f
-        val y = height * 0.5f
-        val right = width * (0.5f + half)
-        val left = width * (0.5f - half)
-
-        val path = Path().apply {
-            if (toLeft) { moveTo(right, y); lineTo(left, y) } else { moveTo(left, y); lineTo(right, y) }
-        }
-        dispatch(GestureDescription.StrokeDescription(path, 0L, Prefs.durationMs(this).toLong()))
-    }
-
-    /** Two quick taps in the middle of the screen, which likes a reel in Instagram. */
-    private fun doubleTap() {
-        val (width, height) = screenSize()
-        fun tap(startMs: Long) = GestureDescription.StrokeDescription(
-            Path().apply { moveTo(width * 0.5f, height * 0.5f) }, startMs, TAP_MS
-        )
-        dispatch(tap(0L), tap(TAP_MS + TAP_GAP_MS))
-    }
-
-    private fun dispatch(vararg strokes: GestureDescription.StrokeDescription) {
-        val builder = GestureDescription.Builder()
-        strokes.forEach(builder::addStroke)
-        val accepted = dispatchGesture(builder.build(), null, null)
+    private fun dispatch(stroke: GestureDescription.StrokeDescription) {
+        val accepted = dispatchGesture(GestureDescription.Builder().addStroke(stroke).build(), null, null)
         if (!accepted) Log.w(TAG, "dispatchGesture was rejected")
     }
 

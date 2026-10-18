@@ -1,19 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Pen Scroll</string>
-    <string name="scroll_down">Scroll Down</string>
-    <string name="scroll_up">Scroll Up</string>
-    <string name="swipe_left">Swipe Left (next)</string>
-    <string name="swipe_right">Swipe Right (previous)</string>
-    <string name="double_tap">Double Tap (like)</string>
-    <string name="action_back">Back</string>
-    <string name="action_home">Home</string>
-    <string name="action_recents">Recents</string>
-    <string name="action_notifications">Open Notifications</string>
-    <string name="action_quick_settings">Open Quick Settings</string>
-    <string name="action_screenshot">Take Screenshot</string>
-    <string name="action_lock_screen">Lock Screen</string>
-    <string name="smart_action">Pen Scroll Smart</string>
     <string name="pen_button_header">Pen button</string>
     <string name="pen_hold_title">Press and hold</string>
     <string name="pen_hold_summary">Scrolls down to the next reel or page</string>
@@ -23,7 +10,7 @@
     <string name="tile_label">Pen Scroll</string>
     <string name="tagline">Scroll any app with your S Pen button</string>
 
-    <string name="accessibility_description">Pen Scroll only performs a single action, such as a swipe, a double tap, Back or Home, when you trigger it (for example from S Pen Air actions). It does not read, store or send any screen content. If you turn on the volume-key option, it also turns volume up/down into scrolls while Instagram is open.</string>
+    <string name="accessibility_description">Pen Scroll only performs a scroll swipe when you trigger it from S Pen Air actions. It does not read, store or send any screen content. If you turn on the volume-key option, it also turns volume up/down into scrolls while Instagram is open.</string>
 
     <string name="service_off_toast">Turn on Pen Scroll in Accessibility settings</string>
     <string name="paused_toast">Pen Scroll is paused</string>

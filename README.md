@@ -2,14 +2,14 @@
 
 Scroll Instagram (or any app) without touching the screen, using the S Pen's Air actions on a Galaxy S24 Ultra.
 
-Samsung's Air actions can launch an app when you press and hold the Pen button. Pen Scroll adds two tiny launcher entries, **Scroll Down** and **Scroll Up**. When Air actions launches one, an invisible activity tells Pen Scroll's accessibility service to swipe on the app underneath and then closes, so Instagram stays in front.
+Samsung's Air actions can launch an app when you press and hold the Pen button. Set that to **Pen Scroll**: each hold opens an invisible activity that tells Pen Scroll's accessibility service to swipe on the app underneath and then closes, so Instagram stays in front. One hold scrolls down; holding again within 2 seconds goes back up. Opening Pen Scroll from the home screen shows the setup screen.
 
 ## What's in the project
 
 | Path | What it is |
 | --- | --- |
 | `app/src/main/java/com/max/penscroll/ScrollAccessibilityService.kt` | Performs the swipe with `dispatchGesture`, after a short delay so the trampoline has closed. Also handles the optional volume-key mode. |
-| `app/src/main/java/com/max/penscroll/TrampolineActivity.kt` | `ScrollDownActivity` and `ScrollUpActivity`. Invisible, no layout, no animations, finish immediately. |
+| `app/src/main/java/com/max/penscroll/TrampolineActivity.kt` | `LaunchActivity`, the launcher entry. Invisible, no layout, no animations, finishes immediately. A launch from Air actions scrolls; any other launch opens setup. |
 | `app/src/main/java/com/max/penscroll/SetupActivity.kt` | Setup screen: service status, settings shortcuts, Pen button summary, Tuning row, setup steps. |
 | `app/src/main/java/com/max/penscroll/TuningActivity.kt` | Tuning screen: swipe sliders and the volume-key switch. |
 | `app/src/main/java/com/max/penscroll/PauseTileService.kt` | Quick Settings tile to pause/resume scrolling. |
@@ -60,8 +60,8 @@ These steps are also shown inside the app.
 2. Android 13+ blocks Accessibility for sideloaded apps. Go to Settings > Apps > Pen Scroll > three-dot menu (top right) > "Allow restricted settings". (If the menu item is missing, try turning on the service once in step 3 first. The "restricted setting" dialog makes the menu item appear.)
 3. Settings > Accessibility > Installed apps > Pen Scroll > turn on.
 4. Settings > Apps > Pen Scroll > Battery > Unrestricted (so Samsung doesn't kill it).
-5. Settings > Advanced features > S Pen > Air actions > Press and hold Pen button > choose "Scroll Down".
-6. If the gesture slots under Anywhere actions accept apps, assign one to "Scroll Down" and one to "Scroll Up".
+5. Settings > Advanced features > S Pen > Air actions > Press and hold Pen button > choose "Pen Scroll".
+6. Open Instagram Reels and press and hold the pen button.
 
 ## Tuning
 
@@ -80,6 +80,6 @@ Open Pen Scroll and tap **Tuning** to adjust these. Changes apply on the next sw
 
 - **Toast says "Turn on Pen Scroll in Accessibility settings"** even though it's on: Samsung sometimes kills the service. Toggle it off and on, and check the battery setting is Unrestricted.
 - **Toast says "Pen Scroll is paused":** the Quick Settings tile paused it. Tap the tile again.
-- **Nothing happens, no toast:** Air actions may not be launching the app. Launch "Scroll Down" from the app drawer while Instagram is in recents to check the swipe itself.
+- **Nothing happens, no toast:** Air actions may not be launching the app. Check that Press and hold Pen button is set to "Pen Scroll", or turn on the volume-key option in Tuning to check the swipe itself.
 - **A brief flash before the swipe:** raise the delay a little.
 - **Landscape:** the swipe uses the current window size, so it should follow rotation, but landscape hasn't been tested.

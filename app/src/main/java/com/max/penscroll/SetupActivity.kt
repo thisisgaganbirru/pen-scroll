@@ -38,8 +38,6 @@ class SetupActivity : Activity() {
             startActivity(Intent(this, TuningActivity::class.java))
         }
 
-        Shortcuts.clearDynamic(this)
-
         addSetupSteps(findViewById<LinearLayout>(R.id.setupCard))
     }
 

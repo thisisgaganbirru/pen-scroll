@@ -19,7 +19,7 @@
             android:exported="false"
             android:parentActivityName=".SetupActivity" />
 
-        <!-- A pen press from Air Command runs Pen Scroll Smart; any other launch opens setup. -->
+        <!-- A pen press-and-hold from Air Command scrolls; any other launch opens setup. -->
         <activity
             android:name=".LaunchActivity"
             android:excludeFromRecents="true"
@@ -37,57 +37,7 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <meta-data
-                android:name="android.app.shortcuts"
-                android:resource="@xml/shortcuts" />
         </activity-alias>
-
-        <activity
-            android:name=".ScrollDownActivity"
-            android:excludeFromRecents="true"
-            android:exported="true"
-            android:icon="@drawable/ic_launcher_down"
-            android:label="@string/scroll_down"
-            android:noHistory="true"
-            android:taskAffinity=""
-            android:theme="@style/Theme.PenScroll.Trampoline">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".ScrollUpActivity"
-            android:excludeFromRecents="true"
-            android:exported="true"
-            android:icon="@drawable/ic_launcher_up"
-            android:label="@string/scroll_up"
-            android:noHistory="true"
-            android:taskAffinity=""
-            android:theme="@style/Theme.PenScroll.Trampoline">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".SmartActivity"
-            android:excludeFromRecents="true"
-            android:exported="true"
-            android:noHistory="true"
-            android:taskAffinity=""
-            android:theme="@style/Theme.PenScroll.Trampoline" />
-
-        <!-- Target of the fixed per-action shortcuts; no launcher entry of its own. -->
-        <activity
-            android:name=".PenActionActivity"
-            android:excludeFromRecents="true"
-            android:exported="true"
-            android:noHistory="true"
-            android:taskAffinity=""
-            android:theme="@style/Theme.PenScroll.Trampoline" />
 
         <service
             android:name=".ScrollAccessibilityService"

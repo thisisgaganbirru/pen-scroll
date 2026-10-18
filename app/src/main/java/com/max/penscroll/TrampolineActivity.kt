@@ -61,31 +61,11 @@ abstract class TrampolineActivity : Activity() {
     }
 }
 
-class ScrollDownActivity : TrampolineActivity() {
-    override fun run(service: ScrollAccessibilityService) = service.perform(PenAction.SCROLL_DOWN)
-}
-
-class ScrollUpActivity : TrampolineActivity() {
-    override fun run(service: ScrollAccessibilityService) = service.perform(PenAction.SCROLL_UP)
-}
-
-/** The press-and-hold entry: once scrolls up, twice quickly scrolls down. */
-class SmartActivity : TrampolineActivity() {
-    override fun run(service: ScrollAccessibilityService) = service.smartPress()
-}
-
 /**
- * The launcher entry. When Air actions' Press and hold is set to the plain "Pen Scroll" app,
- * Air Command launches this, so it acts like Pen Scroll Smart; any other launch opens setup.
+ * The launcher entry. When Air actions' Press and hold is set to "Pen Scroll", Air Command
+ * launches this and the hold scrolls; any other launch opens setup.
  */
 class LaunchActivity : TrampolineActivity() {
     override fun fromPen() = referrer?.host == ScrollAccessibilityService.AIR_COMMAND
     override fun run(service: ScrollAccessibilityService) = service.smartPress()
-}
-
-/** Target of the fixed per-action shortcuts; the action id travels in the intent extra. */
-class PenActionActivity : TrampolineActivity() {
-    override fun run(service: ScrollAccessibilityService) {
-        PenAction.fromId(intent.getStringExtra(Shortcuts.EXTRA_ACTION))?.let(service::perform)
-    }
 }
