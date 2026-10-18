@@ -23,7 +23,9 @@ Implemented on `dev`; builds and lints clean.
 - `ScrollAccessibilityService.perform(action)` waits the configured delay, re-checks pause, then runs `execute`: gestures via `dispatchGesture`, the rest via `performGlobalAction` (Screenshot and Lock Screen need API 28+).
 - Scroll Down/Up keep their own trampolines (`ScrollDownActivity`, `ScrollUpActivity`) and static shortcuts, so existing Air action choices keep working. All other actions go through `PenActionActivity`, which reads the action id from the intent extra.
 - All 12 actions are static shortcuts in `res/xml/shortcuts.xml`. Samsung's Air actions picker listed the static Scroll Down/Up but not dynamic shortcuts (tested on device), so there are no dynamic ones; `Shortcuts.clearDynamic` removes leftovers from the earlier build.
-- The Actions card toggles each action (`Prefs.isActionEnabled`). It only gates execution; a disabled action still appears in the picker and shows a toast when triggered.
-- Known issue: if the picker doesn't show the new entries right away, reopen Settings or restart the phone so Samsung refreshes its shortcut list.
+- Only the Press and hold slot accepts an app shortcut; Samsung's pen gestures (Back, Home, Recents, AI select, Screen write) are fixed system gestures and can't be assigned to apps. So one entry, **Pen Scroll Smart** (`SmartActivity`), resolves the action from the app in front: `Prefs.actionFor(pkg)` returns the per-app mapping or the default (Scroll Down). The per-app card (`PerAppUi.kt`) edits the default and the mapped apps; `<queries>` in the manifest lets it list launcher apps.
+- The 12 fixed shortcuts remain as direct single-action choices.
+- Known issues: `currentPackage` is only set after the first window change, so right after enabling the service the default action runs. Whether the picker lists all entries is unverified.
+
 
 

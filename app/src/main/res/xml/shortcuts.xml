@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
     <shortcut
+        android:shortcutId="smart"
+        android:enabled="true"
+        android:icon="@drawable/ic_action"
+        android:shortcutShortLabel="@string/smart_action"
+        android:shortcutLongLabel="@string/smart_action">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.max.penscroll.SmartActivity"
+            android:targetPackage="com.max.penscroll" />
+    </shortcut>
+    <shortcut
         android:shortcutId="scroll_down"
         android:enabled="true"
         android:icon="@drawable/ic_launcher_down"

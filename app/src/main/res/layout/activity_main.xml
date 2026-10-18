@@ -141,20 +141,20 @@
                 android:visibility="gone" />
         </LinearLayout>
 
-        <!-- Actions -->
+        <!-- Per-app actions -->
         <LinearLayout
-            android:id="@+id/actionsCard"
+            android:id="@+id/perAppCard"
             style="@style/Card">
 
             <TextView
                 style="@style/CardTitle"
                 android:layout_marginBottom="4dp"
-                android:text="@string/actions_header" />
+                android:text="@string/per_app_header" />
 
             <TextView
                 style="@style/Hint"
                 android:layout_marginBottom="16dp"
-                android:text="@string/actions_hint" />
+                android:text="@string/per_app_hint" />
         </LinearLayout>
 
         <!-- Tuning -->

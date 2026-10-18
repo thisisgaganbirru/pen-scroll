@@ -13,9 +13,13 @@
     <string name="action_quick_settings">Open Quick Settings</string>
     <string name="action_screenshot">Take Screenshot</string>
     <string name="action_lock_screen">Lock Screen</string>
-    <string name="action_disabled_toast">This Pen Scroll action is turned off</string>
-    <string name="actions_header">Actions</string>
-    <string name="actions_hint">Every action is listed under Pen Scroll in S Pen Air actions. A turned-off action does nothing when triggered.</string>
+    <string name="smart_action">Pen Scroll Smart</string>
+    <string name="per_app_header">Actions per app</string>
+    <string name="per_app_hint">In Air actions, set Press and hold to \"Pen Scroll Smart\". It then runs the action chosen here for the app in front.</string>
+    <string name="default_row">All other apps</string>
+    <string name="add_app">Add an app</string>
+    <string name="choose_app">Choose an app</string>
+    <string name="remove_app">Remove this app</string>
     <string name="tile_label">Pen Scroll</string>
     <string name="tagline">Scroll any app with your S Pen button</string>
 
@@ -63,7 +67,7 @@
         <item>Android 13+ blocks Accessibility for sideloaded apps. Go to Settings > Apps > Pen Scroll > three-dot menu (top right) > \"Allow restricted settings\".</item>
         <item>Settings > Accessibility > Installed apps > Pen Scroll > turn on.</item>
         <item>Settings > Apps > Pen Scroll > Battery > Unrestricted (so Samsung doesn\'t kill it).</item>
-        <item>Settings > Advanced features > S Pen > Air actions > Press and hold Pen button > choose Pen Scroll, then \"Scroll Down\".</item>
-        <item>If the gesture slots under Anywhere actions accept apps, assign them to other Pen Scroll actions such as \"Scroll Up\" or \"Back\".</item>
+        <item>Settings > Advanced features > S Pen > Air actions > Press and hold Pen button > choose Pen Scroll, then \"Pen Scroll Smart\".</item>
+        <item>In Pen Scroll, pick what it does in each app under \"Actions per app\". Samsung\'s other pen gestures can\'t be reassigned to apps.</item>
     </string-array>
 </resources>

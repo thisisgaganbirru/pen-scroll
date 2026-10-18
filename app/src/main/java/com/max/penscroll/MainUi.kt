@@ -4,7 +4,6 @@ import android.content.res.ColorStateList
 import android.util.TypedValue
 import android.view.Gravity
 import android.widget.LinearLayout
-import android.widget.Switch
 import android.widget.TextView
 import java.util.Locale
 
@@ -16,36 +15,6 @@ fun TextView.setPill(textRes: Int, colorRes: Int) {
     setText(textRes)
     setTextColor(color)
     backgroundTintList = ColorStateList.valueOf((color and 0x00FFFFFF) or 0x2E000000)
-}
-
-/** Appends one on/off row per [PenAction] to [card]. */
-fun addActionToggles(card: LinearLayout) {
-    val context = card.context
-    val topGap = TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_DIP, 12f, context.resources.displayMetrics
-    ).toInt()
-
-    PenAction.entries.forEachIndexed { index, action ->
-        val label = TextView(context).apply {
-            setText(action.label)
-            textSize = 15f
-            setTextColor(context.getColor(R.color.text_primary))
-            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
-        }
-        val toggle = Switch(context).apply {
-            isChecked = Prefs.isActionEnabled(context, action)
-            setOnCheckedChangeListener { _, checked ->
-                Prefs.setActionEnabled(context, action, checked)
-            }
-        }
-        card.addView(LinearLayout(context).apply {
-            orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.CENTER_VERTICAL
-            if (index > 0) setPadding(0, topGap, 0, 0)
-            addView(label)
-            addView(toggle)
-        })
-    }
 }
 
 /** Appends one numbered row per item in R.array.setup_steps to [card]. */

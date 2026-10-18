@@ -68,7 +68,7 @@ class MainActivity : Activity() {
         findViewById<Button>(R.id.testDown).setOnClickListener { startTest(Direction.DOWN) }
         findViewById<Button>(R.id.testUp).setOnClickListener { startTest(Direction.UP) }
 
-        addActionToggles(findViewById<LinearLayout>(R.id.actionsCard))
+        PerAppCard(this, findViewById(R.id.perAppCard))
         Shortcuts.clearDynamic(this)
 
         addSetupSteps(findViewById<LinearLayout>(R.id.setupCard))

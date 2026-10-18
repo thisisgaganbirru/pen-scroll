@@ -33,6 +33,7 @@ class ScrollAccessibilityService : AccessibilityService() {
             ScrollDownActivity::class.java.name,
             ScrollUpActivity::class.java.name,
             PenActionActivity::class.java.name,
+            SmartActivity::class.java.name,
         )
 
         @Volatile
@@ -44,6 +45,9 @@ class ScrollAccessibilityService : AccessibilityService() {
 
     @Volatile
     private var foregroundPackage: String? = null
+
+    /** The app in front, as last seen in a window change; null until the first one. */
+    val currentPackage: String? get() = foregroundPackage
 
     override fun onServiceConnected() {
         super.onServiceConnected()

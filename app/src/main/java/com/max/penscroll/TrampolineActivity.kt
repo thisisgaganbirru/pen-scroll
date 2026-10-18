@@ -25,8 +25,6 @@ abstract class TrampolineActivity : Activity() {
                 Toast.makeText(this, R.string.service_off_toast, Toast.LENGTH_LONG).show()
             Prefs.isPaused(this) ->
                 Toast.makeText(this, R.string.paused_toast, Toast.LENGTH_SHORT).show()
-            !Prefs.isActionEnabled(this, action) ->
-                Toast.makeText(this, R.string.action_disabled_toast, Toast.LENGTH_SHORT).show()
             else -> service.perform(action)
         }
         finish()
@@ -59,7 +57,13 @@ class ScrollUpActivity : TrampolineActivity() {
     override fun resolveAction() = PenAction.SCROLL_UP
 }
 
-/** Target of the dynamic shortcuts; the action id travels in the intent extra. */
+/** The single press-and-hold entry: runs whatever is mapped to the app in front. */
+class SmartActivity : TrampolineActivity() {
+    override fun resolveAction() =
+        Prefs.actionFor(this, ScrollAccessibilityService.instance?.currentPackage)
+}
+
+/** Target of the fixed per-action shortcuts; the action id travels in the intent extra. */
 class PenActionActivity : TrampolineActivity() {
     override fun resolveAction() = PenAction.fromId(intent.getStringExtra(Shortcuts.EXTRA_ACTION))
 }
