@@ -26,6 +26,11 @@ class ScrollAccessibilityService : AccessibilityService() {
             "com.samsung.android.service.aircommand",
         )
 
+        private val TRAMPOLINE_CLASSES = setOf(
+            ScrollDownActivity::class.java.name,
+            ScrollUpActivity::class.java.name,
+        )
+
         @Volatile
         var instance: ScrollAccessibilityService? = null
             private set
@@ -57,7 +62,10 @@ class ScrollAccessibilityService : AccessibilityService() {
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
         if (event?.eventType != AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) return
         val pkg = event.packageName?.toString() ?: return
-        if (pkg == packageName || pkg in IGNORED_PACKAGES) return
+        if (pkg in IGNORED_PACKAGES) return
+        // Our own trampolines flash in front of the real app, so they must not count; any
+        // other Pen Scroll window (the setup screen) does, so volume keys stop scrolling.
+        if (pkg == packageName && event.className?.toString() in TRAMPOLINE_CLASSES) return
         foregroundPackage = pkg
     }
 
@@ -73,6 +81,8 @@ class ScrollAccessibilityService : AccessibilityService() {
     }
 
     private fun dispatchSwipe(direction: Direction) {
+        // Re-check: the user may have paused while this swipe was waiting out its delay.
+        if (Prefs.isPaused(this)) return
         val (width, height) = screenSize()
         val half = Prefs.distancePercent(this) / 200f
         val x = width * 0.5f

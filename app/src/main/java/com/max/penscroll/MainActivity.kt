@@ -84,7 +84,8 @@ class MainActivity : Activity() {
 
     private fun refreshStatus() {
         when {
-            !isServiceEnabled() -> serviceStatus.setPill(R.string.pill_off, R.color.bad)
+            // "Enabled" in Settings isn't enough; swipes only work once the service is connected.
+            !isServiceConnected() ->serviceStatus.setPill(R.string.pill_off, R.color.bad)
             Prefs.isPaused(this) -> serviceStatus.setPill(R.string.pill_paused, R.color.warn)
             else -> serviceStatus.setPill(R.string.pill_on, R.color.ok)
         }
@@ -102,12 +103,13 @@ class MainActivity : Activity() {
         disableBattery.visibility = batteryVisibility
     }
 
-    private fun isServiceEnabled(): Boolean {
+    private fun isServiceConnected(): Boolean {
         val enabled = Settings.Secure.getString(
             contentResolver, Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
         ) ?: return false
         val mine = ComponentName(this, ScrollAccessibilityService::class.java)
-        return enabled.split(':').any { ComponentName.unflattenFromString(it) == mine }
+        val listed = enabled.split(':').any { ComponentName.unflattenFromString(it) == mine }
+        return listed && ScrollAccessibilityService.instance != null
     }
 
     @SuppressLint("BatteryLife")
