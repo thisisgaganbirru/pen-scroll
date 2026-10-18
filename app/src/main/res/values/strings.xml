@@ -15,7 +15,11 @@
     <string name="action_lock_screen">Lock Screen</string>
     <string name="smart_action">Pen Scroll Smart</string>
     <string name="pen_button_header">Pen button</string>
-    <string name="pen_button_hint">In Air actions, set Press and hold to \"Pen Scroll\" (or its \"Pen Scroll Smart\" shortcut).\n• Press and hold once: scroll down.\n• Press and hold again within 2 seconds: scroll back up.</string>
+    <string name="pen_hold_title">Press and hold</string>
+    <string name="pen_hold_summary">Scrolls down to the next reel or page</string>
+    <string name="pen_hold_again_title">Hold again within 2 seconds</string>
+    <string name="pen_hold_again_summary">Goes back to the previous one</string>
+    <string name="pen_button_hint">Works when Air actions › Press and hold Pen button is set to Pen Scroll. Pen button clicks stay with Samsung.</string>
     <string name="tile_label">Pen Scroll</string>
     <string name="tagline">Scroll any app with your S Pen button</string>
 
@@ -38,6 +42,8 @@
     <string name="disable_battery">Disable battery optimization</string>
 
     <string name="tuning_header">Tuning</string>
+    <string name="tuning_summary">Swipe distance, speed, delay and volume keys</string>
+    <string name="navigate_back">Back</string>
     <string name="distance_title">Swipe distance</string>
     <string name="distance_hint">How far the finger travels, as a share of the screen height</string>
     <string name="distance_value">%1$d%%</string>
@@ -50,13 +56,6 @@
     <string name="volume_mode_title">Volume keys scroll Instagram</string>
     <string name="volume_mode_hint">Fallback for when Air actions send volume up/down. Overrides volume keys while Instagram is open.</string>
 
-    <string name="test_header">Try it</string>
-    <string name="test_down">Scroll down</string>
-    <string name="test_up">Scroll up</string>
-    <string name="test_hint">Tap a button, then switch to Instagram within 3 seconds.</string>
-    <string name="countdown">Scrolling %1$s in %2$d…</string>
-    <string name="test_done">Swipe sent.</string>
-
     <string name="setup_header">How to set up</string>
     <string-array name="setup_steps">
         <item>Install the APK.</item>
@@ -64,6 +63,6 @@
         <item>Settings > Accessibility > Installed apps > Pen Scroll > turn on.</item>
         <item>Settings > Apps > Pen Scroll > Battery > Unrestricted (so Samsung doesn\'t kill it).</item>
         <item>Settings > Advanced features > S Pen > Air actions > Press and hold Pen button > choose Pen Scroll.</item>
-        <item>Press and hold once to scroll down; hold again within 2 seconds to go back up. Single and double clicks belong to Samsung and never reach other apps, so they can\'t be used.</item>
+        <item>Open Instagram Reels and press and hold the pen button.</item>
     </string-array>
 </resources>

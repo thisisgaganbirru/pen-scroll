@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="32dp">
+
+        <!-- App bar: back arrow and title, One UI style -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/back"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="-8dp"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/navigate_back"
+                android:src="@drawable/ic_back" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/tuning_header"
+                android:textColor="@color/text_primary"
+                android:textSize="22sp" />
+        </LinearLayout>
+
+        <!-- Swipe -->
+        <LinearLayout style="@style/Card">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/RowLabel"
+                    android:text="@string/distance_title" />
+
+                <TextView
+                    android:id="@+id/distanceValue"
+                    style="@style/Value" />
+            </LinearLayout>
+
+            <TextView
+                style="@style/Hint"
+                android:text="@string/distance_hint" />
+
+            <SeekBar
+                android:id="@+id/distanceSeek"
+                style="@style/Slider" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/RowLabel"
+                    android:text="@string/duration_title" />
+
+                <TextView
+                    android:id="@+id/durationValue"
+                    style="@style/Value" />
+            </LinearLayout>
+
+            <TextView
+                style="@style/Hint"
+                android:text="@string/duration_hint" />
+
+            <SeekBar
+                android:id="@+id/durationSeek"
+                style="@style/Slider" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/RowLabel"
+                    android:text="@string/delay_title" />
+
+                <TextView
+                    android:id="@+id/delayValue"
+                    style="@style/Value" />
+            </LinearLayout>
+
+            <TextView
+                style="@style/Hint"
+                android:text="@string/delay_hint" />
+
+            <SeekBar
+                android:id="@+id/delaySeek"
+                style="@style/Slider" />
+        </LinearLayout>
+
+        <!-- Volume keys -->
+        <LinearLayout
+            style="@style/Card"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/ItemTitle"
+                    android:text="@string/volume_mode_title" />
+
+                <TextView
+                    style="@style/Hint"
+                    android:layout_marginTop="2dp"
+                    android:text="@string/volume_mode_hint" />
+            </LinearLayout>
+
+            <Switch
+                android:id="@+id/volumeSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

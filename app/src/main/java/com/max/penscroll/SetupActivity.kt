@@ -6,28 +6,19 @@ import android.content.ComponentName
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.os.PowerManager
 import android.provider.Settings
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
-import android.widget.SeekBar
-import android.widget.Switch
 import android.widget.TextView
-import android.widget.Toast
 
 class SetupActivity : Activity() {
-
-    private val handler = Handler(Looper.getMainLooper())
-    private var countdownRunnable: Runnable? = null
 
     private lateinit var serviceStatus: TextView
     private lateinit var batteryStatus: TextView
     private lateinit var batteryHint: TextView
     private lateinit var disableBattery: Button
-    private lateinit var countdown: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,36 +28,15 @@ class SetupActivity : Activity() {
         batteryStatus = findViewById(R.id.batteryStatus)
         batteryHint = findViewById(R.id.batteryHint)
         disableBattery = findViewById(R.id.disableBattery)
-        countdown = findViewById(R.id.countdown)
 
         findViewById<Button>(R.id.openAccessibility).setOnClickListener {
             startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
         }
         disableBattery.setOnClickListener { requestIgnoreBatteryOptimizations() }
 
-        bindSlider(
-            R.id.distanceSeek, R.id.distanceValue, R.string.distance_value, Prefs.KEY_DISTANCE,
-            Prefs.MIN_DISTANCE, Prefs.MAX_DISTANCE, Prefs.distancePercent(this), step = 1,
-        )
-        bindSlider(
-            R.id.durationSeek, R.id.durationValue, R.string.duration_value, Prefs.KEY_DURATION,
-            Prefs.MIN_DURATION, Prefs.MAX_DURATION, Prefs.durationMs(this), step = 10,
-        )
-        bindSlider(
-            R.id.delaySeek, R.id.delayValue, R.string.delay_value, Prefs.KEY_DELAY,
-            Prefs.MIN_DELAY, Prefs.MAX_DELAY, Prefs.delayMs(this), step = 10,
-        )
-
-        findViewById<Switch>(R.id.volumeSwitch).apply {
-            isChecked = Prefs.volumeMode(this@SetupActivity)
-            setOnCheckedChangeListener { _, checked ->
-                Prefs.get(this@SetupActivity).edit()
-                    .putBoolean(Prefs.KEY_VOLUME_MODE, checked).apply()
-            }
+        findViewById<View>(R.id.tuningRow).setOnClickListener {
+            startActivity(Intent(this, TuningActivity::class.java))
         }
-
-        findViewById<Button>(R.id.testDown).setOnClickListener { startTest(Direction.DOWN) }
-        findViewById<Button>(R.id.testUp).setOnClickListener { startTest(Direction.UP) }
 
         Shortcuts.clearDynamic(this)
 
@@ -76,12 +46,6 @@ class SetupActivity : Activity() {
     override fun onResume() {
         super.onResume()
         refreshStatus()
-    }
-
-    override fun onDestroy() {
-        // The countdown keeps running while you switch to Instagram (onStop), but not past destroy.
-        countdownRunnable?.let(handler::removeCallbacks)
-        super.onDestroy()
     }
 
     private fun refreshStatus() {
@@ -123,56 +87,5 @@ class SetupActivity : Activity() {
         } catch (e: Exception) {
             startActivity(Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS))
         }
-    }
-
-    /** SeekBar on API 26 has no reliable min, so progress is an offset from [min] in [step]s. */
-    private fun bindSlider(
-        seekId: Int, valueId: Int, valueRes: Int, key: String,
-        min: Int, max: Int, current: Int, step: Int,
-    ) {
-        val label = findViewById<TextView>(valueId)
-        val seek = findViewById<SeekBar>(seekId)
-        seek.max = (max - min) / step
-        seek.progress = (current - min) / step
-        label.text = getString(valueRes, current)
-
-        seek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(bar: SeekBar, progress: Int, fromUser: Boolean) {
-                val value = min + progress * step
-                label.text = getString(valueRes, value)
-                if (fromUser) Prefs.get(this@SetupActivity).edit().putInt(key, value).apply()
-            }
-
-            override fun onStartTrackingTouch(bar: SeekBar) = Unit
-            override fun onStopTrackingTouch(bar: SeekBar) = Unit
-        })
-    }
-
-    private fun startTest(direction: Direction) {
-        if (ScrollAccessibilityService.instance == null) {
-            Toast.makeText(this, R.string.service_off_toast, Toast.LENGTH_LONG).show()
-            return
-        }
-        countdownRunnable?.let(handler::removeCallbacks)
-        val name = if (direction == Direction.DOWN) "down" else "up"
-        var remaining = 3
-        countdown.visibility = View.VISIBLE
-
-        val tick = object : Runnable {
-            override fun run() {
-                if (remaining > 0) {
-                    countdown.text = getString(R.string.countdown, name, remaining)
-                    remaining--
-                    handler.postDelayed(this, 1000)
-                } else {
-                    // The countdown already gave you time to switch apps, so no extra delay.
-                    ScrollAccessibilityService.instance?.scroll(direction, delayMs = 0L)
-                    countdown.setText(R.string.test_done)
-                    countdownRunnable = null
-                }
-            }
-        }
-        countdownRunnable = tick
-        handler.post(tick)
     }
 }

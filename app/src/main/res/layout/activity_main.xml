@@ -92,180 +92,71 @@
                 android:text="@string/disable_battery" />
         </LinearLayout>
 
-        <!-- Try it -->
-        <LinearLayout style="@style/Card">
-
-            <TextView
-                style="@style/CardTitle"
-                android:layout_marginBottom="4dp"
-                android:text="@string/test_header" />
-
-            <TextView
-                style="@style/Hint"
-                android:text="@string/test_hint" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/testUp"
-                    style="@style/Button.Tonal"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="6dp"
-                    android:layout_weight="1"
-                    android:text="@string/test_up" />
-
-                <Button
-                    android:id="@+id/testDown"
-                    style="@style/Button.Primary"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="6dp"
-                    android:layout_weight="1"
-                    android:text="@string/test_down" />
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/countdown"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:fontFamily="sans-serif-medium"
-                android:gravity="center"
-                android:textColor="@color/accent"
-                android:textSize="15sp"
-                android:visibility="gone" />
-        </LinearLayout>
-
         <!-- Pen button -->
         <LinearLayout style="@style/Card">
 
             <TextView
                 style="@style/CardTitle"
-                android:layout_marginBottom="4dp"
                 android:text="@string/pen_button_header" />
+
+            <TextView
+                style="@style/ItemTitle"
+                android:text="@string/pen_hold_title" />
+
+            <TextView
+                style="@style/Hint"
+                android:layout_marginTop="2dp"
+                android:text="@string/pen_hold_summary" />
+
+            <TextView
+                style="@style/ItemTitle"
+                android:layout_marginTop="14dp"
+                android:text="@string/pen_hold_again_title" />
+
+            <TextView
+                style="@style/Hint"
+                android:layout_marginTop="2dp"
+                android:text="@string/pen_hold_again_summary" />
+
+            <View style="@style/Divider" />
 
             <TextView
                 style="@style/Hint"
                 android:text="@string/pen_button_hint" />
         </LinearLayout>
 
-        <!-- Tuning -->
-        <LinearLayout style="@style/Card">
-
-            <TextView
-                style="@style/CardTitle"
-                android:text="@string/tuning_header" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    style="@style/RowLabel"
-                    android:text="@string/distance_title" />
-
-                <TextView
-                    android:id="@+id/distanceValue"
-                    style="@style/Value" />
-            </LinearLayout>
-
-            <TextView
-                style="@style/Hint"
-                android:text="@string/distance_hint" />
-
-            <SeekBar
-                android:id="@+id/distanceSeek"
-                style="@style/Slider" />
+        <!-- Tuning: opens its own screen -->
+        <LinearLayout
+            android:id="@+id/tuningRow"
+            style="@style/Card"
+            android:background="@drawable/bg_card_clickable"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:orientation="horizontal">
+                android:layout_marginEnd="12dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
                 <TextView
-                    style="@style/RowLabel"
-                    android:text="@string/duration_title" />
+                    style="@style/CardTitle"
+                    android:layout_marginBottom="2dp"
+                    android:text="@string/tuning_header" />
 
                 <TextView
-                    android:id="@+id/durationValue"
-                    style="@style/Value" />
+                    style="@style/Hint"
+                    android:text="@string/tuning_summary" />
             </LinearLayout>
 
-            <TextView
-                style="@style/Hint"
-                android:text="@string/duration_hint" />
-
-            <SeekBar
-                android:id="@+id/durationSeek"
-                style="@style/Slider" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    style="@style/RowLabel"
-                    android:text="@string/delay_title" />
-
-                <TextView
-                    android:id="@+id/delayValue"
-                    style="@style/Value" />
-            </LinearLayout>
-
-            <TextView
-                style="@style/Hint"
-                android:text="@string/delay_hint" />
-
-            <SeekBar
-                android:id="@+id/delaySeek"
-                style="@style/Slider" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginVertical="16dp"
-                android:background="@color/card_stroke" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="12dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/volume_mode_title"
-                        android:textColor="@color/text_primary"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        style="@style/Hint"
-                        android:layout_marginTop="2dp"
-                        android:text="@string/volume_mode_hint" />
-                </LinearLayout>
-
-                <Switch
-                    android:id="@+id/volumeSwitch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_chevron" />
         </LinearLayout>
 
         <!-- Setup -->

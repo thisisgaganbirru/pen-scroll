@@ -14,6 +14,11 @@
             android:name=".SetupActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".TuningActivity"
+            android:exported="false"
+            android:parentActivityName=".SetupActivity" />
+
         <!-- A pen press from Air Command runs Pen Scroll Smart; any other launch opens setup. -->
         <activity
             android:name=".LaunchActivity"

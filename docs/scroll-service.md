@@ -3,6 +3,8 @@
 ## Files
 - `app/src/main/java/com/max/penscroll/ScrollAccessibilityService.kt`
 - `app/src/main/java/com/max/penscroll/SetupActivity.kt` (`isServiceConnected`, `refreshStatus`)
+- `app/src/main/java/com/max/penscroll/TuningActivity.kt`: sliders and the volume switch, moved off the setup screen. It opens from the One UI-style "Tuning" row (`tuningRow`, chevron, ripple `bg_card_clickable`) and has a back-arrow app bar (`activity_tuning.xml`).
+- The setup screen's cards are Status, Pen button (hold / hold again rows plus a note on the Air actions setting), the Tuning row, and How to set up. The "Try it" test buttons and countdown were removed.
 
 ## Behavior
 - `foregroundPackage` follows window-state changes. Systemui, keyboard and Air Command windows are ignored. Pen Scroll's own windows count, except the Scroll Down and Scroll Up trampolines, so opening the setup screen stops volume-key scrolling in Instagram.

@@ -10,7 +10,8 @@ Samsung's Air actions can launch an app when you press and hold the Pen button. 
 | --- | --- |
 | `app/src/main/java/com/max/penscroll/ScrollAccessibilityService.kt` | Performs the swipe with `dispatchGesture`, after a short delay so the trampoline has closed. Also handles the optional volume-key mode. |
 | `app/src/main/java/com/max/penscroll/TrampolineActivity.kt` | `ScrollDownActivity` and `ScrollUpActivity`. Invisible, no layout, no animations, finish immediately. |
-| `app/src/main/java/com/max/penscroll/SetupActivity.kt` | Setup screen: service status, settings shortcuts, tuning sliders, 3 second test buttons, setup steps. |
+| `app/src/main/java/com/max/penscroll/SetupActivity.kt` | Setup screen: service status, settings shortcuts, Pen button summary, Tuning row, setup steps. |
+| `app/src/main/java/com/max/penscroll/TuningActivity.kt` | Tuning screen: swipe sliders and the volume-key switch. |
 | `app/src/main/java/com/max/penscroll/PauseTileService.kt` | Quick Settings tile to pause/resume scrolling. |
 | `app/src/main/java/com/max/penscroll/Prefs.kt` | SharedPreferences for distance, duration, delay, pause and volume mode. |
 | `app/src/main/res/xml/accessibility_service_config.xml` | Accessibility service config (gestures + key filtering). |
@@ -64,13 +65,11 @@ These steps are also shown inside the app.
 
 ## Tuning
 
-Open Pen Scroll to adjust these. Changes apply on the next swipe, no rebuild needed.
+Open Pen Scroll and tap **Tuning** to adjust these. Changes apply on the next swipe, no rebuild needed.
 
 - **Swipe distance** (30 to 80% of screen height, default 50%, which is 75% to 25%).
 - **Swipe duration** (100 to 600 ms, default 200 ms). Shorter swipes flick harder.
 - **Delay before swipe** (50 to 500 ms, default 200 ms). If the swipe sometimes happens before Instagram is back in front, raise this.
-
-Use the test buttons: tap one, switch to Instagram within 3 seconds and watch it move.
 
 ## Extras
 

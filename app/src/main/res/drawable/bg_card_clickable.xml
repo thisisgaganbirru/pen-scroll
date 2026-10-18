@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- bg_card with a press ripple, for cards that open another screen. -->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/card_stroke">
+    <item android:drawable="@drawable/bg_card" />
+</ripple>
