@@ -2,136 +2,267 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
-    android:fillViewport="true">
+    android:clipToPadding="false"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:paddingHorizontal="16dp"
+        android:paddingTop="24dp"
+        android:paddingBottom="32dp">
 
-        <TextView
-            android:id="@+id/serviceStatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/batteryStatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textSize="14sp" />
-
-        <Button
-            android:id="@+id/openAccessibility"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/open_accessibility" />
-
-        <Button
-            android:id="@+id/disableBattery"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/disable_battery" />
-
-        <TextView
-            style="@style/SectionHeader"
-            android:text="@string/tuning_header" />
-
-        <TextView
-            android:id="@+id/distanceLabel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <SeekBar
-            android:id="@+id/distanceSeek"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingVertical="12dp" />
-
-        <TextView
-            android:id="@+id/durationLabel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <SeekBar
-            android:id="@+id/durationSeek"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingVertical="12dp" />
-
-        <TextView
-            android:id="@+id/delayLabel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <SeekBar
-            android:id="@+id/delaySeek"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingVertical="12dp" />
-
-        <Switch
-            android:id="@+id/volumeSwitch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/volume_mode_label" />
-
-        <TextView
-            style="@style/SectionHeader"
-            android:text="@string/test_header" />
-
+        <!-- Header -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/test_hint"
-            android:textColor="@color/text_secondary" />
+            android:layout_marginHorizontal="4dp"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/app_name"
+            android:textColor="@color/text_primary"
+            android:textSize="32sp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal">
+        <TextView
+            style="@style/Hint"
+            android:layout_marginHorizontal="4dp"
+            android:layout_marginTop="2dp"
+            android:text="@string/tagline"
+            android:textSize="15sp" />
+
+        <!-- Status -->
+        <LinearLayout style="@style/Card">
+
+            <TextView
+                style="@style/CardTitle"
+                android:text="@string/status_title" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/RowLabel"
+                    android:text="@string/service_label" />
+
+                <TextView
+                    android:id="@+id/serviceStatus"
+                    style="@style/Pill" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/RowLabel"
+                    android:text="@string/battery_label" />
+
+                <TextView
+                    android:id="@+id/batteryStatus"
+                    style="@style/Pill" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/batteryHint"
+                style="@style/Hint"
+                android:layout_marginTop="8dp"
+                android:text="@string/battery_hint" />
 
             <Button
-                android:id="@+id/testUp"
-                android:layout_width="0dp"
+                android:id="@+id/openAccessibility"
+                style="@style/Button.Primary"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/test_up" />
+                android:layout_marginTop="18dp"
+                android:text="@string/open_accessibility" />
 
             <Button
-                android:id="@+id/testDown"
-                android:layout_width="0dp"
+                android:id="@+id/disableBattery"
+                style="@style/Button.Tonal"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/test_down" />
+                android:layout_marginTop="10dp"
+                android:text="@string/disable_battery" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/countdown"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textSize="16sp" />
+        <!-- Try it -->
+        <LinearLayout style="@style/Card">
 
-        <TextView
-            style="@style/SectionHeader"
-            android:text="@string/setup_header" />
+            <TextView
+                style="@style/CardTitle"
+                android:layout_marginBottom="4dp"
+                android:text="@string/test_header" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/card"
-            android:lineSpacingMultiplier="1.15"
-            android:padding="14dp"
-            android:text="@string/setup_steps"
-            android:textColor="@color/text_secondary"
-            android:textIsSelectable="true" />
+            <TextView
+                style="@style/Hint"
+                android:text="@string/test_hint" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/testUp"
+                    style="@style/Button.Tonal"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="6dp"
+                    android:layout_weight="1"
+                    android:text="@string/test_up" />
+
+                <Button
+                    android:id="@+id/testDown"
+                    style="@style/Button.Primary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_weight="1"
+                    android:text="@string/test_down" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/countdown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:textColor="@color/accent"
+                android:textSize="15sp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <!-- Tuning -->
+        <LinearLayout style="@style/Card">
+
+            <TextView
+                style="@style/CardTitle"
+                android:text="@string/tuning_header" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/RowLabel"
+                    android:text="@string/distance_title" />
+
+                <TextView
+                    android:id="@+id/distanceValue"
+                    style="@style/Value" />
+            </LinearLayout>
+
+            <TextView
+                style="@style/Hint"
+                android:text="@string/distance_hint" />
+
+            <SeekBar
+                android:id="@+id/distanceSeek"
+                style="@style/Slider" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/RowLabel"
+                    android:text="@string/duration_title" />
+
+                <TextView
+                    android:id="@+id/durationValue"
+                    style="@style/Value" />
+            </LinearLayout>
+
+            <TextView
+                style="@style/Hint"
+                android:text="@string/duration_hint" />
+
+            <SeekBar
+                android:id="@+id/durationSeek"
+                style="@style/Slider" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/RowLabel"
+                    android:text="@string/delay_title" />
+
+                <TextView
+                    android:id="@+id/delayValue"
+                    style="@style/Value" />
+            </LinearLayout>
+
+            <TextView
+                style="@style/Hint"
+                android:text="@string/delay_hint" />
+
+            <SeekBar
+                android:id="@+id/delaySeek"
+                style="@style/Slider" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="16dp"
+                android:background="@color/card_stroke" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="12dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/volume_mode_title"
+                        android:textColor="@color/text_primary"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        style="@style/Hint"
+                        android:layout_marginTop="2dp"
+                        android:text="@string/volume_mode_hint" />
+                </LinearLayout>
+
+                <Switch
+                    android:id="@+id/volumeSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Setup -->
+        <LinearLayout
+            android:id="@+id/setupCard"
+            style="@style/Card">
+
+            <TextView
+                style="@style/CardTitle"
+                android:text="@string/setup_header" />
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>

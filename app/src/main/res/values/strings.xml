@@ -4,34 +4,53 @@
     <string name="scroll_down">Scroll Down</string>
     <string name="scroll_up">Scroll Up</string>
     <string name="tile_label">Pen Scroll</string>
+    <string name="tagline">Scroll any app with your S Pen button</string>
 
     <string name="accessibility_description">Pen Scroll only performs a single swipe gesture on the screen when you trigger \"Scroll Down\" or \"Scroll Up\" (for example from S Pen Air actions). It does not read, store or send any screen content. If you turn on the volume-key option, it also turns volume up/down into scrolls while Instagram is open.</string>
 
     <string name="service_off_toast">Turn on Pen Scroll in Accessibility settings</string>
     <string name="paused_toast">Pen Scroll is paused</string>
 
-    <string name="status_on">Accessibility service: ON</string>
-    <string name="status_off">Accessibility service: OFF</string>
-    <string name="status_paused">Accessibility service: ON (paused)</string>
-    <string name="battery_ok">Battery optimization: disabled (good)</string>
-    <string name="battery_bad">Battery optimization: enabled, Samsung may kill the service</string>
+    <string name="status_title">Status</string>
+    <string name="service_label">Accessibility service</string>
+    <string name="battery_label">Battery</string>
+    <string name="pill_on">On</string>
+    <string name="pill_off">Off</string>
+    <string name="pill_paused">Paused</string>
+    <string name="pill_unrestricted">Unrestricted</string>
+    <string name="pill_optimized">Optimized</string>
+    <string name="battery_hint">Samsung may stop the service in the background. Turn off battery optimization.</string>
 
     <string name="open_accessibility">Open Accessibility settings</string>
     <string name="disable_battery">Disable battery optimization</string>
 
     <string name="tuning_header">Tuning</string>
-    <string name="distance_label">Swipe distance: %1$d%% of screen</string>
-    <string name="duration_label">Swipe duration: %1$d ms</string>
-    <string name="delay_label">Delay before swipe: %1$d ms</string>
-    <string name="volume_mode_label">Volume keys scroll Instagram (overrides volume keys while Instagram is open)</string>
+    <string name="distance_title">Swipe distance</string>
+    <string name="distance_hint">How far the finger travels, as a share of the screen height</string>
+    <string name="distance_value">%1$d%%</string>
+    <string name="duration_title">Swipe speed</string>
+    <string name="duration_hint">Shorter is a faster flick</string>
+    <string name="duration_value">%1$d ms</string>
+    <string name="delay_title">Delay before swipe</string>
+    <string name="delay_hint">Raise this if the swipe lands before the app underneath is back</string>
+    <string name="delay_value">%1$d ms</string>
+    <string name="volume_mode_title">Volume keys scroll Instagram</string>
+    <string name="volume_mode_hint">Fallback for when Air actions send volume up/down. Overrides volume keys while Instagram is open.</string>
 
-    <string name="test_header">Test</string>
-    <string name="test_down">Test scroll down</string>
-    <string name="test_up">Test scroll up</string>
-    <string name="test_hint">Tap a test button, then switch to Instagram within 3 seconds.</string>
+    <string name="test_header">Try it</string>
+    <string name="test_down">Scroll down</string>
+    <string name="test_up">Scroll up</string>
+    <string name="test_hint">Tap a button, then switch to Instagram within 3 seconds.</string>
     <string name="countdown">Scrolling %1$s in %2$d…</string>
     <string name="test_done">Swipe sent.</string>
 
     <string name="setup_header">How to set up</string>
-    <string name="setup_steps">1. Install the APK.\n\n2. Android 13+ blocks Accessibility for sideloaded apps. Go to Settings > Apps > Pen Scroll > three-dot menu (top right) > \"Allow restricted settings\".\n\n3. Settings > Accessibility > Installed apps > Pen Scroll > turn on.\n\n4. Settings > Apps > Pen Scroll > Battery > Unrestricted (so Samsung doesn\'t kill it).\n\n5. Settings > Advanced features > S Pen > Air actions > Press and hold Pen button > choose \"Scroll Down\".\n\n6. If the gesture slots under Anywhere actions accept apps, assign one to \"Scroll Down\" and one to \"Scroll Up\".</string>
+    <string-array name="setup_steps">
+        <item>Install the APK.</item>
+        <item>Android 13+ blocks Accessibility for sideloaded apps. Go to Settings > Apps > Pen Scroll > three-dot menu (top right) > \"Allow restricted settings\".</item>
+        <item>Settings > Accessibility > Installed apps > Pen Scroll > turn on.</item>
+        <item>Settings > Apps > Pen Scroll > Battery > Unrestricted (so Samsung doesn\'t kill it).</item>
+        <item>Settings > Advanced features > S Pen > Air actions > Press and hold Pen button > choose \"Scroll Down\".</item>
+        <item>If the gesture slots under Anywhere actions accept apps, assign one to \"Scroll Down\" and one to \"Scroll Up\".</item>
+    </string-array>
 </resources>

@@ -10,7 +10,9 @@ import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager
 import android.provider.Settings
+import android.view.View
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.Switch
 import android.widget.TextView
@@ -23,6 +25,8 @@ class MainActivity : Activity() {
 
     private lateinit var serviceStatus: TextView
     private lateinit var batteryStatus: TextView
+    private lateinit var batteryHint: TextView
+    private lateinit var disableBattery: Button
     private lateinit var countdown: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,25 +35,25 @@ class MainActivity : Activity() {
 
         serviceStatus = findViewById(R.id.serviceStatus)
         batteryStatus = findViewById(R.id.batteryStatus)
+        batteryHint = findViewById(R.id.batteryHint)
+        disableBattery = findViewById(R.id.disableBattery)
         countdown = findViewById(R.id.countdown)
 
         findViewById<Button>(R.id.openAccessibility).setOnClickListener {
             startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
         }
-        findViewById<Button>(R.id.disableBattery).setOnClickListener {
-            requestIgnoreBatteryOptimizations()
-        }
+        disableBattery.setOnClickListener { requestIgnoreBatteryOptimizations() }
 
         bindSlider(
-            R.id.distanceSeek, R.id.distanceLabel, R.string.distance_label, Prefs.KEY_DISTANCE,
+            R.id.distanceSeek, R.id.distanceValue, R.string.distance_value, Prefs.KEY_DISTANCE,
             Prefs.MIN_DISTANCE, Prefs.MAX_DISTANCE, Prefs.distancePercent(this), step = 1,
         )
         bindSlider(
-            R.id.durationSeek, R.id.durationLabel, R.string.duration_label, Prefs.KEY_DURATION,
+            R.id.durationSeek, R.id.durationValue, R.string.duration_value, Prefs.KEY_DURATION,
             Prefs.MIN_DURATION, Prefs.MAX_DURATION, Prefs.durationMs(this), step = 10,
         )
         bindSlider(
-            R.id.delaySeek, R.id.delayLabel, R.string.delay_label, Prefs.KEY_DELAY,
+            R.id.delaySeek, R.id.delayValue, R.string.delay_value, Prefs.KEY_DELAY,
             Prefs.MIN_DELAY, Prefs.MAX_DELAY, Prefs.delayMs(this), step = 10,
         )
 
@@ -63,6 +67,8 @@ class MainActivity : Activity() {
 
         findViewById<Button>(R.id.testDown).setOnClickListener { startTest(Direction.DOWN) }
         findViewById<Button>(R.id.testUp).setOnClickListener { startTest(Direction.UP) }
+
+        addSetupSteps(findViewById<LinearLayout>(R.id.setupCard))
     }
 
     override fun onResume() {
@@ -77,20 +83,23 @@ class MainActivity : Activity() {
     }
 
     private fun refreshStatus() {
-        val enabled = isServiceEnabled()
-        serviceStatus.setText(
-            when {
-                !enabled -> R.string.status_off
-                Prefs.isPaused(this) -> R.string.status_paused
-                else -> R.string.status_on
-            }
-        )
-        serviceStatus.setTextColor(getColor(if (enabled) R.color.ok else R.color.bad))
+        when {
+            !isServiceEnabled() -> serviceStatus.setPill(R.string.pill_off, R.color.bad)
+            Prefs.isPaused(this) -> serviceStatus.setPill(R.string.pill_paused, R.color.warn)
+            else -> serviceStatus.setPill(R.string.pill_on, R.color.ok)
+        }
 
         val pm = getSystemService(PowerManager::class.java)
         val ignoring = pm.isIgnoringBatteryOptimizations(packageName)
-        batteryStatus.setText(if (ignoring) R.string.battery_ok else R.string.battery_bad)
-        batteryStatus.setTextColor(getColor(if (ignoring) R.color.ok else R.color.bad))
+        if (ignoring) {
+            batteryStatus.setPill(R.string.pill_unrestricted, R.color.ok)
+        } else {
+            batteryStatus.setPill(R.string.pill_optimized, R.color.warn)
+        }
+        // Nothing left to fix once it's unrestricted, so hide the hint and button.
+        val batteryVisibility = if (ignoring) View.GONE else View.VISIBLE
+        batteryHint.visibility = batteryVisibility
+        disableBattery.visibility = batteryVisibility
     }
 
     private fun isServiceEnabled(): Boolean {
@@ -114,19 +123,19 @@ class MainActivity : Activity() {
 
     /** SeekBar on API 26 has no reliable min, so progress is an offset from [min] in [step]s. */
     private fun bindSlider(
-        seekId: Int, labelId: Int, labelRes: Int, key: String,
+        seekId: Int, valueId: Int, valueRes: Int, key: String,
         min: Int, max: Int, current: Int, step: Int,
     ) {
-        val label = findViewById<TextView>(labelId)
+        val label = findViewById<TextView>(valueId)
         val seek = findViewById<SeekBar>(seekId)
         seek.max = (max - min) / step
         seek.progress = (current - min) / step
-        label.text = getString(labelRes, current)
+        label.text = getString(valueRes, current)
 
         seek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(bar: SeekBar, progress: Int, fromUser: Boolean) {
                 val value = min + progress * step
-                label.text = getString(labelRes, value)
+                label.text = getString(valueRes, value)
                 if (fromUser) Prefs.get(this@MainActivity).edit().putInt(key, value).apply()
             }
 
@@ -143,6 +152,7 @@ class MainActivity : Activity() {
         countdownRunnable?.let(handler::removeCallbacks)
         val name = if (direction == Direction.DOWN) "down" else "up"
         var remaining = 3
+        countdown.visibility = View.VISIBLE
 
         val tick = object : Runnable {
             override fun run() {
