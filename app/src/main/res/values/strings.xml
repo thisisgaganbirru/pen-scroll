@@ -15,7 +15,7 @@
     <string name="action_lock_screen">Lock Screen</string>
     <string name="smart_action">Pen Scroll Smart</string>
     <string name="pen_button_header">Pen button</string>
-    <string name="pen_button_hint">In Air actions, set Press and hold to \"Pen Scroll\" (or its \"Pen Scroll Smart\" shortcut).\n• Press and hold once: scroll up (runs after about 1 second).\n• Press and hold twice quickly: scroll down.</string>
+    <string name="pen_button_hint">In Air actions, set Press and hold to \"Pen Scroll\" (or its \"Pen Scroll Smart\" shortcut).\n• Press and hold once: scroll down (runs after about 1 second).\n• Press and hold twice quickly: scroll up.</string>
     <string name="tile_label">Pen Scroll</string>
     <string name="tagline">Scroll any app with your S Pen button</string>
 
@@ -64,6 +64,6 @@
         <item>Settings > Accessibility > Installed apps > Pen Scroll > turn on.</item>
         <item>Settings > Apps > Pen Scroll > Battery > Unrestricted (so Samsung doesn\'t kill it).</item>
         <item>Settings > Advanced features > S Pen > Air actions > Press and hold Pen button > choose Pen Scroll.</item>
-        <item>Press and hold once to scroll up, twice quickly to scroll down. Single and double clicks belong to Samsung and never reach other apps, so they can\'t be used.</item>
+        <item>Press and hold once to scroll down, twice quickly to scroll up. Single and double clicks belong to Samsung and never reach other apps, so they can\'t be used.</item>
     </string-array>
 </resources>

@@ -83,8 +83,8 @@ class ScrollAccessibilityService : AccessibilityService() {
     override fun onInterrupt() = Unit
 
     /**
-     * One press-and-hold scrolls up; a second within [MULTI_PRESS_WINDOW_MS] scrolls down
-     * instead. Pen Scroll only sees these trampoline launches, never the pen clicks themselves.
+     * One press-and-hold scrolls down (next reel); a second within [MULTI_PRESS_WINDOW_MS]
+     * scrolls up instead. Pen Scroll only sees these trampoline launches, never the pen clicks themselves.
      */
     fun smartPress() {
         if (Prefs.isPaused(this)) return
@@ -92,12 +92,12 @@ class ScrollAccessibilityService : AccessibilityService() {
         if (pending != null) {
             handler.removeCallbacks(pending)
             pendingPress = null
-            perform(PenAction.SCROLL_DOWN)
+            perform(PenAction.SCROLL_UP)
         } else {
             val single = Runnable {
                 pendingPress = null
                 // The window already gave the trampoline time to close, so no extra delay.
-                perform(PenAction.SCROLL_UP, delayMs = 0L)
+                perform(PenAction.SCROLL_DOWN, delayMs = 0L)
             }
             pendingPress = single
             handler.postDelayed(single, MULTI_PRESS_WINDOW_MS)
