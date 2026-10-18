@@ -14,3 +14,6 @@
 
 ## Status
 Implemented on `dev` (965d069); builds and lints clean.
+
+## Air actions entry points
+- `res/xml/shortcuts.xml` declares static app shortcuts "Scroll Down" / "Scroll Up" (targets `ScrollDownActivity` / `ScrollUpActivity`), attached to `MainActivity` in the manifest. Samsung's Air actions picker lists apps, so choosing the plain "Pen Scroll" entry opens the setup screen; the shortcut entries are what trigger the scroll.

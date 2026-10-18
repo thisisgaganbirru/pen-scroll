@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="scroll_down"
+        android:enabled="true"
+        android:icon="@drawable/ic_launcher_down"
+        android:shortcutShortLabel="@string/scroll_down"
+        android:shortcutLongLabel="@string/scroll_down">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.max.penscroll.ScrollDownActivity"
+            android:targetPackage="com.max.penscroll" />
+    </shortcut>
+    <shortcut
+        android:shortcutId="scroll_up"
+        android:enabled="true"
+        android:icon="@drawable/ic_launcher_up"
+        android:shortcutShortLabel="@string/scroll_up"
+        android:shortcutLongLabel="@string/scroll_up">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.max.penscroll.ScrollUpActivity"
+            android:targetPackage="com.max.penscroll" />
+    </shortcut>
+</shortcuts>
