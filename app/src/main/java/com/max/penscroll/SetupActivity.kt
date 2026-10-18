@@ -18,7 +18,7 @@ import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
 
-class MainActivity : Activity() {
+class SetupActivity : Activity() {
 
     private val handler = Handler(Looper.getMainLooper())
     private var countdownRunnable: Runnable? = null
@@ -58,9 +58,9 @@ class MainActivity : Activity() {
         )
 
         findViewById<Switch>(R.id.volumeSwitch).apply {
-            isChecked = Prefs.volumeMode(this@MainActivity)
+            isChecked = Prefs.volumeMode(this@SetupActivity)
             setOnCheckedChangeListener { _, checked ->
-                Prefs.get(this@MainActivity).edit()
+                Prefs.get(this@SetupActivity).edit()
                     .putBoolean(Prefs.KEY_VOLUME_MODE, checked).apply()
             }
         }
@@ -140,7 +140,7 @@ class MainActivity : Activity() {
             override fun onProgressChanged(bar: SeekBar, progress: Int, fromUser: Boolean) {
                 val value = min + progress * step
                 label.text = getString(valueRes, value)
-                if (fromUser) Prefs.get(this@MainActivity).edit().putInt(key, value).apply()
+                if (fromUser) Prefs.get(this@SetupActivity).edit().putInt(key, value).apply()
             }
 
             override fun onStartTrackingTouch(bar: SeekBar) = Unit

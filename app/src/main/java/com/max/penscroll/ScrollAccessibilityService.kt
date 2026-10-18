@@ -18,12 +18,13 @@ class ScrollAccessibilityService : AccessibilityService() {
     companion object {
         private const val TAG = "PenScroll"
         private const val INSTAGRAM = "com.instagram.android"
+        const val AIR_COMMAND = "com.samsung.android.service.aircommand"
 
         // Windows that pop over the real foreground app and shouldn't count as "foreground".
         private val IGNORED_PACKAGES = setOf(
             "com.android.systemui",
             "com.samsung.android.honeyboard",
-            "com.samsung.android.service.aircommand",
+            AIR_COMMAND,
         )
 
         private const val MULTI_PRESS_WINDOW_MS = 1200L
@@ -35,6 +36,7 @@ class ScrollAccessibilityService : AccessibilityService() {
             ScrollUpActivity::class.java.name,
             PenActionActivity::class.java.name,
             SmartActivity::class.java.name,
+            LaunchActivity::class.java.name,
         )
 
         @Volatile

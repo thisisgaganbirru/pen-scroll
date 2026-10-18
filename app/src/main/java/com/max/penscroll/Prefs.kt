@@ -3,7 +3,7 @@ package com.max.penscroll
 import android.content.Context
 import android.content.SharedPreferences
 
-/** All tunable values, so they can be changed from MainActivity without rebuilding. */
+/** All tunable values, so they can be changed from SetupActivity without rebuilding. */
 object Prefs {
     private const val NAME = "pen_scroll"
 

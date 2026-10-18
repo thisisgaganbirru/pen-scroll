@@ -7,7 +7,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import java.util.Locale
 
-/** Small view helpers for MainActivity, kept separate so the screen can be rendered in previews. */
+/** Small view helpers for SetupActivity, kept separate so the screen can be rendered in previews. */
 
 /** Colors a status pill: text in [color], background a faint wash of the same color. */
 fun TextView.setPill(textRes: Int, colorRes: Int) {

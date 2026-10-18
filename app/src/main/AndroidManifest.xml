@@ -11,8 +11,23 @@
         android:theme="@style/Theme.PenScroll">
 
         <activity
+            android:name=".SetupActivity"
+            android:exported="false" />
+
+        <!-- A pen press from Air Command runs Pen Scroll Smart; any other launch opens setup. -->
+        <activity
+            android:name=".LaunchActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:noHistory="true"
+            android:taskAffinity=""
+            android:theme="@style/Theme.PenScroll.Trampoline" />
+
+        <!-- Keeps the old launcher component name, so Air actions and home icons set to it still work. -->
+        <activity-alias
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:targetActivity=".LaunchActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -20,7 +35,7 @@
             <meta-data
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
-        </activity>
+        </activity-alias>
 
         <activity
             android:name=".ScrollDownActivity"
