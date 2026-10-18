@@ -16,9 +16,9 @@
 Implemented on `dev`; builds and lints clean.
 
 ## Air actions entry points
-- `res/xml/shortcuts.xml` declares static app shortcuts "Scroll Down" / "Scroll Up" (targets `ScrollDownActivity` / `ScrollUpActivity`), attached to `MainActivity` in the manifest. Samsung's Air actions picker lists apps, so choosing the plain "Pen Scroll" entry opens the setup screen; the shortcut entries are what trigger the scroll.
+- `res/xml/shortcuts.xml` declares the static app shortcuts (Pen Scroll Smart, Scroll Down/Up and the other actions), attached to `MainActivity` in the manifest. Samsung's Air actions picker lists apps, so choosing the plain "Pen Scroll" entry opens the setup screen; the shortcut entries are what trigger the scroll.
 
-## Actions and toggles
+## Actions and per-app mapping
 - `PenAction` lists 12 actions: Scroll Down/Up, Swipe Left/Right, Double Tap, Back, Home, Recents, Notifications, Quick Settings, Screenshot, Lock Screen.
 - `ScrollAccessibilityService.perform(action)` waits the configured delay, re-checks pause, then runs `execute`: gestures via `dispatchGesture`, the rest via `performGlobalAction` (Screenshot and Lock Screen need API 28+).
 - Scroll Down/Up keep their own trampolines (`ScrollDownActivity`, `ScrollUpActivity`) and static shortcuts, so existing Air action choices keep working. All other actions go through `PenActionActivity`, which reads the action id from the intent extra.
@@ -26,6 +26,7 @@ Implemented on `dev`; builds and lints clean.
 - Only the Press and hold slot accepts an app shortcut; Samsung's pen gestures (Back, Home, Recents, AI select, Screen write) are fixed system gestures and can't be assigned to apps. So one entry, **Pen Scroll Smart** (`SmartActivity`), resolves the action from the app in front: `Prefs.actionFor(pkg)` returns the per-app mapping or the default (Scroll Down). The per-app card (`PerAppUi.kt`) edits the default and the mapped apps; `<queries>` in the manifest lets it list launcher apps.
 - The 12 fixed shortcuts remain as direct single-action choices.
 - Known issues: `currentPackage` is only set after the first window change, so right after enabling the service the default action runs. Whether the picker lists all entries is unverified.
+
 
 
 
