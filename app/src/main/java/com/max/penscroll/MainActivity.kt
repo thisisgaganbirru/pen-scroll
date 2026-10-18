@@ -68,8 +68,8 @@ class MainActivity : Activity() {
         findViewById<Button>(R.id.testDown).setOnClickListener { startTest(Direction.DOWN) }
         findViewById<Button>(R.id.testUp).setOnClickListener { startTest(Direction.UP) }
 
-        addActionToggles(findViewById<LinearLayout>(R.id.actionsCard)) { Shortcuts.publish(this) }
-        Shortcuts.publish(this)
+        addActionToggles(findViewById<LinearLayout>(R.id.actionsCard))
+        Shortcuts.clearDynamic(this)
 
         addSetupSteps(findViewById<LinearLayout>(R.id.setupCard))
     }

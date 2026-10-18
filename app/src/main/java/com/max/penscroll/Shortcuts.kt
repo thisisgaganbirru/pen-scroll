@@ -1,40 +1,23 @@
 package com.max.penscroll
 
 import android.content.Context
-import android.content.Intent
-import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
-import android.graphics.drawable.Icon
 import android.util.Log
 
-/** Publishes the enabled non-scroll actions as dynamic shortcuts, which Air actions can pick. */
+/**
+ * All shortcuts are static (res/xml/shortcuts.xml): Samsung's Air actions picker lists those
+ * but not dynamic ones. The intent extra names which [PenAction] [PenActionActivity] runs.
+ */
 object Shortcuts {
     private const val TAG = "PenScroll"
     const val EXTRA_ACTION = "pen_action"
 
-    fun publish(context: Context) {
-        val manager = context.getSystemService(ShortcutManager::class.java) ?: return
-        val icon = Icon.createWithResource(context, R.drawable.ic_action)
-
-        val shortcuts = PenAction.entries
-            .filter { !it.isStatic && Prefs.isActionEnabled(context, it) }
-            .map { action ->
-                val label = context.getString(action.label)
-                ShortcutInfo.Builder(context, action.id)
-                    .setShortLabel(label)
-                    .setLongLabel(label)
-                    .setIcon(icon)
-                    .setIntent(
-                        Intent(context, PenActionActivity::class.java)
-                            .setAction(Intent.ACTION_VIEW)
-                            .putExtra(EXTRA_ACTION, action.id)
-                    )
-                    .build()
-            }
+    /** Earlier builds published dynamic shortcuts; their ids would clash with the static ones. */
+    fun clearDynamic(context: Context) {
         try {
-            manager.setDynamicShortcuts(shortcuts)
+            context.getSystemService(ShortcutManager::class.java)?.removeAllDynamicShortcuts()
         } catch (e: Exception) {
-            Log.w(TAG, "Could not publish shortcuts", e)
+            Log.w(TAG, "Could not clear dynamic shortcuts", e)
         }
     }
 }

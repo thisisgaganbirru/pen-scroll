@@ -18,11 +18,8 @@ fun TextView.setPill(textRes: Int, colorRes: Int) {
     backgroundTintList = ColorStateList.valueOf((color and 0x00FFFFFF) or 0x2E000000)
 }
 
-/**
- * Appends one on/off row per [PenAction] to [card]. [onChanged] runs after a switch flips so
- * the caller can republish shortcuts.
- */
-fun addActionToggles(card: LinearLayout, onChanged: () -> Unit) {
+/** Appends one on/off row per [PenAction] to [card]. */
+fun addActionToggles(card: LinearLayout) {
     val context = card.context
     val topGap = TypedValue.applyDimension(
         TypedValue.COMPLEX_UNIT_DIP, 12f, context.resources.displayMetrics
@@ -39,7 +36,6 @@ fun addActionToggles(card: LinearLayout, onChanged: () -> Unit) {
             isChecked = Prefs.isActionEnabled(context, action)
             setOnCheckedChangeListener { _, checked ->
                 Prefs.setActionEnabled(context, action, checked)
-                onChanged()
             }
         }
         card.addView(LinearLayout(context).apply {

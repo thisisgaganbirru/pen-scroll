@@ -15,7 +15,7 @@
     <string name="action_lock_screen">Lock Screen</string>
     <string name="action_disabled_toast">This Pen Scroll action is turned off</string>
     <string name="actions_header">Actions</string>
-    <string name="actions_hint">Turned-on actions appear in S Pen Air actions under Pen Scroll. Turn off the ones you don\'t need.</string>
+    <string name="actions_hint">Every action is listed under Pen Scroll in S Pen Air actions. A turned-off action does nothing when triggered.</string>
     <string name="tile_label">Pen Scroll</string>
     <string name="tagline">Scroll any app with your S Pen button</string>
 

@@ -15,9 +15,6 @@ enum class PenAction(val id: String, val label: Int) {
     SCREENSHOT("screenshot", R.string.action_screenshot),
     LOCK_SCREEN("lock_screen", R.string.action_lock_screen);
 
-    /** The two scroll actions are static shortcuts (res/xml/shortcuts.xml); the rest are dynamic. */
-    val isStatic: Boolean get() = this == SCROLL_DOWN || this == SCROLL_UP
-
     companion object {
         fun fromId(id: String?): PenAction? = entries.firstOrNull { it.id == id }
     }
