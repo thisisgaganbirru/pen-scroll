@@ -3,7 +3,7 @@ package com.max.penscroll
 import android.content.Context
 import android.content.SharedPreferences
 
-/** All tunable values, so they can be changed from SetupActivity without rebuilding. */
+/** All tunable values, so they can be changed from TuningActivity without rebuilding. */
 object Prefs {
     private const val NAME = "pen_scroll"
 
@@ -42,5 +42,4 @@ object Prefs {
         get(context).edit().putBoolean(KEY_PAUSED, paused).apply()
 
     fun volumeMode(context: Context) = get(context).getBoolean(KEY_VOLUME_MODE, false)
-
 }
