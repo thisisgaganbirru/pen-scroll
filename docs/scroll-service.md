@@ -12,7 +12,7 @@
 - The setup screen shows the service as On only when it is listed in Settings and `ScrollAccessibilityService.instance` is non-null (connected).
 
 ## Status
-Implemented on `dev`; builds and lints clean.
+Released as v1.0.0 (versionName in `app/build.gradle.kts`, tag `v1.0.0` on `main`, APK attached to the GitHub release). Builds and lints clean.
 
 ## Air actions entry points
 - The only entry point is the launcher `<activity-alias>` named `.MainActivity` (the old component name, so saved Air actions and home icons keep working) targeting `LaunchActivity`, a trampoline. `LaunchActivity.fromPen()` checks `referrer` for `com.samsung.android.service.aircommand`: a launch from Air Command runs `smartPress()`, any other launch opens `SetupActivity` in its own task.
